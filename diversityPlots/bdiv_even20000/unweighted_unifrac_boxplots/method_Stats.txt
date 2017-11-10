@@ -1,0 +1,18 @@
+# The tests of significance were performed using a two-sided Student's two-sample t-test.
+# Alternative hypothesis: Group 1 mean != Group 2 mean
+# The nonparametric p-values were calculated using 999 Monte Carlo permutations.
+# The nonparametric p-values contain the correct number of significant digits.
+# Entries marked with "N/A" could not be calculated because at least one of the groups
+# of distances was empty, both groups each contained only a single distance, or
+# the test could not be performed (e.g. no variance in groups with the same mean).
+Group 1	Group 2	t statistic	Parametric p-value	Parametric p-value (Bonferroni-corrected)	Nonparametric p-value	Nonparametric p-value (Bonferroni-corrected)
+All within method	All between method	-3.63407463678	0.000308198719191	0.00308198719191	0.002	0.020
+All within method	ERNESTO_BEADS vs. ERNESTO_BEADS	0.160247609191	0.872776406549	1	0.889	1.000
+All within method	CORE_BEADS vs. CORE_BEADS	-0.169054592201	0.865849178349	1	0.865	1.000
+All within method	ERNESTO_BEADS vs. CORE_BEADS	-3.63407463678	0.000308198719191	0.00308198719191	0.001	0.010
+All between method	ERNESTO_BEADS vs. ERNESTO_BEADS	3.04715623543	0.00247423966296	0.0247423966296	0.003	0.030
+All between method	CORE_BEADS vs. CORE_BEADS	2.86565530366	0.00439661526346	0.0439661526346	0.005	0.050
+All between method	ERNESTO_BEADS vs. CORE_BEADS	0.0	1.0	1	1.000	1.000
+ERNESTO_BEADS vs. ERNESTO_BEADS	CORE_BEADS vs. CORE_BEADS	-0.284512324853	0.776265183291	1	0.791	1.000
+ERNESTO_BEADS vs. ERNESTO_BEADS	ERNESTO_BEADS vs. CORE_BEADS	-3.04715623543	0.00247423966296	0.0247423966296	0.005	0.050
+CORE_BEADS vs. CORE_BEADS	ERNESTO_BEADS vs. CORE_BEADS	-2.86565530366	0.00439661526346	0.0439661526346	0.009	0.090

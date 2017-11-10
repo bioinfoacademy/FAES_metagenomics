@@ -1,0 +1,7 @@
+#SampleID	Treatment	Description
+S1	drug	1
+S2	placebo	2
+S3	drug	3
+S4	drug	4
+S5	placebo	5
+S6	placebo	6

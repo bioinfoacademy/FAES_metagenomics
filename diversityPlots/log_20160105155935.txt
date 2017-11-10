@@ -1,0 +1,273 @@
+Logging started at 15:59:35 on 05 Jan 2016
+QIIME version: 1.9.1
+
+qiime_config values:
+blastmat_dir	/usr/local/apps/QIIME/apps/blast-2.2.22/data
+pick_otus_reference_seqs_fp	/usr/local/apps/QIIME/1.9.1/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta
+sc_queue	all.q
+pynast_template_alignment_fp	/usr/local/apps/QIIME/1.9.1/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set_aligned/85_otus.pynast.fasta
+cluster_jobs_fp	start_parallel_jobs.py
+assign_taxonomy_reference_seqs_fp	/usr/local/apps/QIIME/1.9.1/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta
+torque_queue	friendlyq
+jobs_to_start	8
+denoiser_min_per_core	50
+working_dir	.
+assign_taxonomy_id_to_taxonomy_fp	/usr/local/apps/QIIME/1.9.1/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/taxonomy/97_otu_taxonomy.txt
+temp_dir	/data/zhangh18/tmp_qiime/
+slurm_memory	None
+blastall_fp	blastall
+seconds_to_sleep	60
+
+parameter file values:
+alpha_diversity:metrics	shannon,PD_whole_tree,observed_otus,goods_coverage
+summarize_taxa:upper_percentage	0.01
+summarize_taxa:level	2,3,4,5,6,7
+parallel:jobs_to_start	16
+
+Input file md5 sums:
+otu_tax.biom: 9dd1a5d52b90e6e2a47b9979239c22ec
+map.txt: 692d977c4cf17ae662962ae9131a1ec7
+rep_set.tre: 0e1d9b31c422c3833bd2c81597f8ec95
+
+Executing commands.
+
+# Generate BIOM table summary command 
+biom summarize-table -i otu_tax.biom -o diversityPlots/biom_table_summary.txt 
+
+Stdout:
+
+Stderr:
+
+# Filter low sequence count samples from table (minimum sequence count: 20000) command 
+filter_samples_from_otu_table.py -i otu_tax.biom -o diversityPlots/table_mc20000.biom -n 20000
+
+Stdout:
+
+Stderr:
+
+# Rarify the OTU table to 20000 sequences/sample command 
+single_rarefaction.py -i diversityPlots/table_mc20000.biom -o diversityPlots/table_even20000.biom -d 20000
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Beta Diversity (weighted_unifrac) command 
+parallel_beta_diversity.py -i diversityPlots/table_even20000.biom -o diversityPlots/bdiv_even20000/ --metrics weighted_unifrac -T  -t rep_set.tre --jobs_to_start 16
+
+Stdout:
+
+Stderr:
+
+# Rename distance matrix (weighted_unifrac) command 
+mv diversityPlots/bdiv_even20000//weighted_unifrac_table_even20000.txt diversityPlots/bdiv_even20000//weighted_unifrac_dm.txt
+
+Stdout:
+
+Stderr:
+
+# Principal coordinates (weighted_unifrac) command 
+principal_coordinates.py -i diversityPlots/bdiv_even20000//weighted_unifrac_dm.txt -o diversityPlots/bdiv_even20000//weighted_unifrac_pc.txt 
+
+Stdout:
+
+Stderr:
+/usr/local/apps/QIIME/1.9.1/lib/python2.7/site-packages/skbio/stats/ordination/_principal_coordinate_analysis.py:107: RuntimeWarning: The result contains negative eigenvalues. Please compare their magnitude with the magnitude of some of the largest positive eigenvalues. If the negative ones are smaller, it's probably safe to ignore them, but if they are large in magnitude, the results won't be useful. See the Notes section for more details. The smallest eigenvalue is -0.0185460374293 and the largest is 0.544767631151.
+  RuntimeWarning
+
+# Make emperor plots, weighted_unifrac) command 
+make_emperor.py -i diversityPlots/bdiv_even20000//weighted_unifrac_pc.txt -o diversityPlots/bdiv_even20000//weighted_unifrac_emperor_pcoa_plot/ -m map.txt 
+
+Stdout:
+
+Stderr:
+
+# Beta Diversity (unweighted_unifrac) command 
+parallel_beta_diversity.py -i diversityPlots/table_even20000.biom -o diversityPlots/bdiv_even20000/ --metrics unweighted_unifrac -T  -t rep_set.tre --jobs_to_start 16
+
+Stdout:
+
+Stderr:
+
+# Rename distance matrix (unweighted_unifrac) command 
+mv diversityPlots/bdiv_even20000//unweighted_unifrac_table_even20000.txt diversityPlots/bdiv_even20000//unweighted_unifrac_dm.txt
+
+Stdout:
+
+Stderr:
+
+# Principal coordinates (unweighted_unifrac) command 
+principal_coordinates.py -i diversityPlots/bdiv_even20000//unweighted_unifrac_dm.txt -o diversityPlots/bdiv_even20000//unweighted_unifrac_pc.txt 
+
+Stdout:
+
+Stderr:
+/usr/local/apps/QIIME/1.9.1/lib/python2.7/site-packages/skbio/stats/ordination/_principal_coordinate_analysis.py:107: RuntimeWarning: The result contains negative eigenvalues. Please compare their magnitude with the magnitude of some of the largest positive eigenvalues. If the negative ones are smaller, it's probably safe to ignore them, but if they are large in magnitude, the results won't be useful. See the Notes section for more details. The smallest eigenvalue is -0.00501415482623 and the largest is 0.238942285959.
+  RuntimeWarning
+
+# Make emperor plots, unweighted_unifrac) command 
+make_emperor.py -i diversityPlots/bdiv_even20000//unweighted_unifrac_pc.txt -o diversityPlots/bdiv_even20000//unweighted_unifrac_emperor_pcoa_plot/ -m map.txt 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Alpha rarefaction command 
+parallel_multiple_rarefactions.py -T -i diversityPlots/table_mc20000.biom -m 10 -x 20000 -s 1999 -o diversityPlots/arare_max20000//rarefaction/  --jobs_to_start 16
+
+Stdout:
+
+Stderr:
+
+# Alpha diversity on rarefied OTU tables command 
+parallel_alpha_diversity.py -T -i diversityPlots/arare_max20000//rarefaction/ -o diversityPlots/arare_max20000//alpha_div/ --metrics shannon,PD_whole_tree,observed_otus,goods_coverage -t rep_set.tre --jobs_to_start 16
+
+Stdout:
+
+Stderr:
+
+# Collate alpha command 
+collate_alpha.py -i diversityPlots/arare_max20000//alpha_div/ -o diversityPlots/arare_max20000//alpha_div_collated/ 
+
+Stdout:
+
+Stderr:
+
+# Removing intermediate files command 
+rm -r diversityPlots/arare_max20000//rarefaction/ diversityPlots/arare_max20000//alpha_div/
+
+Stdout:
+
+Stderr:
+
+# Rarefaction plot: All metrics command 
+make_rarefaction_plots.py -i diversityPlots/arare_max20000//alpha_div_collated/ -m map.txt -o diversityPlots/arare_max20000//alpha_rarefaction_plots/ 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Sort OTU Table command 
+sort_otu_table.py -i diversityPlots/table_mc20000.biom -o diversityPlots/taxa_plots/table_mc20000_sorted.biom
+
+Stdout:
+
+Stderr:
+
+# Summarize Taxonomy command 
+summarize_taxa.py -i diversityPlots/taxa_plots/table_mc20000_sorted.biom -o diversityPlots/taxa_plots/ --upper_percentage 0.01 --level 2,3,4,5,6,7
+
+Stdout:
+
+Stderr:
+
+# Plot Taxonomy Summary command 
+plot_taxa_summary.py -i diversityPlots/taxa_plots/table_mc20000_sorted_L2.txt,diversityPlots/taxa_plots/table_mc20000_sorted_L3.txt,diversityPlots/taxa_plots/table_mc20000_sorted_L4.txt,diversityPlots/taxa_plots/table_mc20000_sorted_L5.txt,diversityPlots/taxa_plots/table_mc20000_sorted_L6.txt,diversityPlots/taxa_plots/table_mc20000_sorted_L7.txt -o diversityPlots/taxa_plots//taxa_summary_plots/ 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Collapse samples in OTU table by categories command 
+collapse_samples.py -m map.txt -b diversityPlots/table_mc20000.biom --output_biom_fp diversityPlots/taxa_plots_method/method_otu_table.biom --output_mapping_fp diversityPlots/taxa_plots_method/method_map.txt --collapse_fields 'method' 
+
+Stdout:
+
+Stderr:
+
+# Sort OTU Table command 
+sort_otu_table.py -i diversityPlots/taxa_plots_method/method_otu_table.biom -o diversityPlots/taxa_plots_method/method_otu_table_sorted.biom
+
+Stdout:
+
+Stderr:
+
+# Summarize Taxonomy command 
+summarize_taxa.py -i diversityPlots/taxa_plots_method/method_otu_table_sorted.biom -o diversityPlots/taxa_plots_method/ --upper_percentage 0.01 --level 2,3,4,5,6,7
+
+Stdout:
+
+Stderr:
+
+# Plot Taxonomy Summary command 
+plot_taxa_summary.py -i diversityPlots/taxa_plots_method/method_otu_table_sorted_L2.txt,diversityPlots/taxa_plots_method/method_otu_table_sorted_L3.txt,diversityPlots/taxa_plots_method/method_otu_table_sorted_L4.txt,diversityPlots/taxa_plots_method/method_otu_table_sorted_L5.txt,diversityPlots/taxa_plots_method/method_otu_table_sorted_L6.txt,diversityPlots/taxa_plots_method/method_otu_table_sorted_L7.txt -o diversityPlots/taxa_plots_method//taxa_summary_plots/ 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Boxplots (method) command 
+make_distance_boxplots.py -d diversityPlots/bdiv_even20000//weighted_unifrac_dm.txt -f method -o diversityPlots/bdiv_even20000//weighted_unifrac_boxplots/ -m map.txt -n 999 
+
+Stdout:
+
+Stderr:
+
+# Boxplots (method) command 
+make_distance_boxplots.py -d diversityPlots/bdiv_even20000//unweighted_unifrac_dm.txt -f method -o diversityPlots/bdiv_even20000//unweighted_unifrac_boxplots/ -m map.txt -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (shannon) command 
+compare_alpha_diversity.py -i diversityPlots/arare_max20000//alpha_div_collated/shannon.txt -m map.txt -c method -o diversityPlots/arare_max20000//compare_shannon -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (PD_whole_tree) command 
+compare_alpha_diversity.py -i diversityPlots/arare_max20000//alpha_div_collated/PD_whole_tree.txt -m map.txt -c method -o diversityPlots/arare_max20000//compare_PD_whole_tree -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (observed_otus) command 
+compare_alpha_diversity.py -i diversityPlots/arare_max20000//alpha_div_collated/observed_otus.txt -m map.txt -c method -o diversityPlots/arare_max20000//compare_observed_otus -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (goods_coverage) command 
+compare_alpha_diversity.py -i diversityPlots/arare_max20000//alpha_div_collated/goods_coverage.txt -m map.txt -c method -o diversityPlots/arare_max20000//compare_goods_coverage -n 999 
+
+Stdout:
+
+Stderr:
+
+# Group significance (method) command 
+group_significance.py -i diversityPlots/table_even20000.biom -m map.txt -c method -o diversityPlots/group_significance_method.txt 
+
+Stdout:
+
+Stderr:
+
+# Compress the filtered BIOM table command 
+gzip diversityPlots/table_mc20000.biom
+
+Stdout:
+
+Stderr:
+
+# Compress the rarefied BIOM table command 
+gzip diversityPlots/table_even20000.biom
+
+Stdout:
+
+Stderr:
+
+
+Logging stopped at 16:02:15 on 05 Jan 2016

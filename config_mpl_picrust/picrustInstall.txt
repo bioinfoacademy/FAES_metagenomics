@@ -1,0 +1,37 @@
+Hi Kassi,
+
+Thanks for your detailed message. I'm not aware of what the 'module' package does that you are trying to install via conda. In lieu of that, I have tried to install PICRUSt on my Mac using conda. Following are specifications of the my conda, Python and Mac and the individual steps with which I used to successfully install PICRUSt on Mac:
+
+conda 4.1.6 with Python 2.7.12 for Mac OS X El Capitan Version 10.11.4. 
+
+I assume you have sudo permissions, load up a new terminal window and do the following steps:
+
+# Create a new environment call picrust_env
+# Install numpy and wget pacakges
+conda create -n picrust_env numpy==1.5.1 wget
+source activate picrust_env
+# Install pyqi, cogent and biom separately, since it's causing problem
+pip install pyqi cogent==1.5.3 biom-format==1.3.1 
+
+PICRUSt (1.0.0):
+# curl not retreiving the whole file for some reason
+python -c 'import wget; wget.download("https://github.com/picrust/picrust/releases/download/1.0.0/picrust-1.0.0.tar.gz")'
+tar -xzvf picrust-1.0.0.tar.gz
+mv picrust-1.0.0.tar.gz picrust-1.0.0
+python -c 'import wget; wget.download("ftp://ftp.microbio.me/pub/picrust-references/picrust-1.0.0/16S_13_5_precalculated.tab.gz")'
+# This step will take some time
+python -c 'import wget; wget.download("ftp://ftp.microbio.me/pub/picrust-references/picrust-1.0.0/ko_13_5_precalculated.tab.gz")'
+mkdir picrust-1.0.0/picrust/data
+mv ko_13_5_precalculated.tab.gz picrust-1.0.0/picrust/data
+mv 16S_13_5_precalculated.tab.gz picrust-1.0.0/picrust/data
+cd picrust-1.0.0/
+python setup.py install
+
+Hope this helps and works.
+
+Lastly, PICRUSt and QIIME should have their own separate virtual environments. You cannot have both QIIME and PICRUSt in same virtual environment to work.
+
+I know it's a bit of a pain switching between two environments but at the moment, this is the solution I see. Maybe PICRUSt developers can better comment on when they plan to update their BIOM version. Thanks a lot.
+
+Cheers,
+Ali

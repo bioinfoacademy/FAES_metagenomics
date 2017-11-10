@@ -1,0 +1,1160 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;">
+  <title>Rarefaction Curves</title>
+<style type="text/css">
+td.data{font-size:10px;border-spacing:0px 10px;text-align:center;}
+td.headers{font-size:12px;font-weight:bold;text-align:center;}
+table{border-spacing:0px;}
+.removed{display:none;}
+.expands{cursor:pointer; cursor:hand;}
+.child1 td:first-child{padding-left: 3px;}
+</style>
+<script language="javascript" type="text/javascript">
+
+function show_hide_category(checkobject){
+    var imagetype=document.getElementById('imagetype').value;
+    img=document.getElementById(checkobject.name.replace('_raw'+imagetype,'_ave'+imagetype))
+    if (checkobject.checked==false){
+        img.style.display='none';
+    }else{
+        img.style.display='';
+    }
+}
+
+function reset_tree(){
+    var category=document.getElementById('category').value;
+    var metric=document.getElementById('metric').value;
+    var old_all_categories=document.getElementById('all_categories');
+    var imagetype=document.getElementById('imagetype').value;
+    cat_list=old_all_categories.value.split('$#!')
+    if (metric!='' && category != ''){
+    for (var i=1, il=cat_list.length; i<il; i++){
+        group=metric+category+cat_list[i]
+        main_class=metric+category
+        var exp_item=document.getElementById(group);
+        if (exp_item!=null){
+            if (exp_item.innerHTML=='\u25BC'){
+                exp_item.innerHTML='\u25B6'
+                var rows=document.getElementsByName(group);
+                for (var j=0, jl=rows.length; j<jl; j++){
+                    rows[j].style.display="none";
+                }
+            }
+            var rows=document.getElementsByName(group+'_raw'+imagetype);
+            for (var j=0, jl=rows.length; j<jl; j++){
+                if (rows[j].checked==false){
+                    rows[j].checked=true;
+                }
+            }
+        }
+    }
+}
+}
+
+function changeMetric(SelObject){
+    var category=document.getElementById('category');
+    var old_metric=document.getElementById('metric');
+    var imagetype=document.getElementById('imagetype').value;
+    var legend=document.getElementById('legend');
+    var array=document.getElementById('all_categories').value.split('$#!')
+    var plots=document.getElementById('plots');
+    plots.style.display='none'
+    reset_tree();
+    if (category.value != ''){
+        legend.style.display="";
+        cat=SelObject.value+category.value
+        data_display=document.getElementsByName(cat)
+        for (var i=0, il=data_display.length; i<il; i++){
+            data_display[i].style.display="";
+        }
+        cat=old_metric.value+category.value
+        data_hide=document.getElementsByName(cat)
+        for (var i=0, il=data_hide.length; i<il; i++){
+            data_hide[i].style.display="none";
+        }
+        data_display=document.getElementsByName(category.value)
+        for (var i=0, il=data_display.length; i<il; i++){
+            data_display[i].style.display="";
+        }
+        new_cat=SelObject.value+category.value
+        plots.innerHTML=''
+        for (var i=1, il=array.length; i<il; i++){
+            img=document.createElement('img')
+            img.setAttribute('width',"600px")
+            img.setAttribute('id',array[i]+'_ave'+imagetype)
+            img.setAttribute('style','position:absolute;z-index:0')
+            img.setAttribute('src',"./average_plots/"+SelObject.value+array[0]+imagetype)
+            plots.appendChild(img)
+        }
+        plots.style.display=''
+    }
+
+old_metric.value=SelObject.value;
+
+// If both combo boxes have changed the value, display a disclaimer
+if (document.getElementById('select_metric_combo').selectedIndex !== 0 &&  document.getElementById('select_category_combo').selectedIndex !== 0) {
+    document.getElementById('nan_disclaimer').style.display='inline';
+}
+}
+
+function changeCategory(SelObject){
+    var old_category=document.getElementById('category');
+    var metric=document.getElementById('metric').value;
+    var imagetype=document.getElementById('imagetype').value;
+    var legend=document.getElementById('legend');
+    var plots=document.getElementById('plots');
+    var array=SelObject.value.split('$#!')
+    var old_all_categories=document.getElementById('all_categories')
+    category=array[0]
+    plots.style.display='none'
+    reset_tree();
+
+    if (metric != ''){
+        legend.style.display="";
+
+        data_display=document.getElementsByName(category)
+        for (var i=0, il=data_display.length; i<il; i++){
+            data_display[i].style.display="";
+        }
+        data_hide=document.getElementsByName(old_category.value)
+        for (var i=0, il=data_hide.length; i<il; i++){
+            data_hide[i].style.display="none";
+        }
+        cat=metric+category
+        data_display=document.getElementsByName(cat)
+        for (var i=0, il=data_display.length; i<il; i++){
+            data_display[i].style.display="";
+        }
+        cat=metric+old_category.value
+        data_hide=document.getElementsByName(cat)
+        for (var i=0, il=data_hide.length; i<il; i++){
+            data_hide[i].style.display="none";
+        }
+        cat=metric+category
+        plots.innerHTML=''
+        for (var i=1, il=array.length; i<il; i++){
+            img=document.createElement('img')
+            img.setAttribute('width',"600px")
+            img.setAttribute('id',metric+array[i]+'_ave'+imagetype)
+            img.setAttribute('style','position:absolute;z-index:0')
+            img.setAttribute('src',"./average_plots/"+metric+array[0]+imagetype)
+            plots.appendChild(img)
+        }
+        plots.style.display=''
+    }
+old_all_categories.value=SelObject.value;
+old_category.value=category;
+// If both combo boxes have changed the value, display a disclaimer
+if (document.getElementById('select_metric_combo').selectedIndex !== 0 &&  document.getElementById('select_category_combo').selectedIndex !== 0) {
+    document.getElementById('nan_disclaimer').style.display='inline';
+}
+}
+function toggle(){
+    var plots=document.getElementById('plots');
+    var imagetype=document.getElementById('imagetype').value;
+    var plot_str='';
+    var category=document.getElementById('category');
+    var metric=document.getElementById('metric');
+    expansion_element=document.getElementById(arguments[0]);
+    rows=document.getElementsByName(arguments[0]);
+    if (expansion_element.innerHTML=='\u25B6'){
+        expansion_element.innerHTML='\u25BC'
+        show_row=arguments[0]+'_raw'+imagetype
+
+        if (document.getElementById(show_row)==null){
+            img=document.createElement('img')
+            img.setAttribute('width',"600px")
+            img.setAttribute('id',arguments[0]+'_raw'+imagetype)
+            img.setAttribute('style','position:absolute;z-index:0')
+            
+            plots.appendChild(img)
+        }else{
+            document.getElementById(arguments[0]+'_raw'+imagetype).style.display=''
+        }
+        for (var i=0, il=rows.length;i<il;i++){
+            rows[i].style.display='';
+        }
+    }else{
+        expansion_element.innerHTML='\u25B6'
+        document.getElementById(arguments[0]+'_raw'+imagetype).style.display='none'
+        for (var i=0, il=rows.length;i<il;i++){
+            rows[i].style.display='none';
+        }
+    }
+}
+
+function show_hide_categories(SelObject){
+    var all_categories=document.getElementById('all_categories').value.split('$#!')
+    var category=document.getElementById('category').value;
+    var imagetype=document.getElementById('imagetype').value;
+    var metric=document.getElementById('metric').value;
+    for (var i=1, il=all_categories.length; i<il; i++){
+        basename=metric+category+all_categories[i]
+        raw_image=basename+'_raw'+imagetype
+        ave_image=basename+'_ave'+imagetype
+        checkbox=document.getElementsByName(raw_image)
+        if (SelObject.value=='All'){
+            if (checkbox[0].checked==false){
+                checkbox[0].checked=true
+                document.getElementById(ave_image).style.display=''
+            }
+        }else if (SelObject.value=='None'){
+            if (checkbox[0].checked==true){
+                checkbox[0].checked=false
+                document.getElementById(ave_image).style.display='none'
+            }
+        }else if (SelObject.value=='Invert'){
+            if (checkbox[0].checked==true){
+                checkbox[0].checked=false
+                document.getElementById(ave_image).style.display='none'
+            }else if (checkbox[0].checked==false){
+                checkbox[0].checked=true
+                document.getElementById(ave_image).style.display=''
+            }
+        }
+    }
+    document.getElementById('show_category').selectedIndex=0;
+}
+</script>
+
+</head>
+<body>
+<form action=''>
+<input id="metric" type="hidden">
+<input id="category" type="hidden">
+<input id="imagetype" type="hidden" value=".png">
+<input id="all_categories" type="hidden">
+</form>
+<table><tr>
+<td><b>Select a Metric:</b></td>
+<td>
+<select onchange="javascript:changeMetric(this)" id="select_metric_combo">
+<option>&nbsp;</option>
+<option value="PD_whole_tree">PD_whole_tree</option>
+<option value="chao1">chao1</option>
+<option value="observed_otus">observed_otus</option>
+</select>
+</td>
+<td><b>&nbsp;&nbsp;Select a Category:</b></td>
+<td>
+<select onchange="javascript:changeCategory(this)" id="select_category_combo">
+<option>&nbsp;</option>
+<option value="Description$#!col_2_row_0$#!col_2_row_2$#!col_2_row_1$#!col_2_row_4$#!col_2_row_3$#!col_2_row_5">Description</option>
+<option value="SampleID$#!col_0_row_2$#!col_0_row_1$#!col_0_row_0$#!col_0_row_5$#!col_0_row_4$#!col_0_row_3">SampleID</option>
+<option value="Treatment$#!col_1_row_5$#!col_1_row_3">Treatment</option>
+</select>
+</td>
+</table>
+<br>
+<div style="width:950px">
+<div id="plots" style="width:650px;height:550px;float:left;"></div>
+
+<div id="legend" style="width:300px;height:550px;float:right;display:none;">
+    <p><b>Show Categories:
+    <select id="show_category" onchange="show_hide_categories(this);">
+        <option value="">&nbsp;</option>
+        <option value="All">All</option>
+        <option value="None">None</option>
+        <option value="Invert">Invert</option>
+    </select>
+    </b></p>
+<b>Legend</b><div STYLE="border: thin black solid; height: 300px; width: 200px; font-size: 12px; overflow: auto;"><table>
+<tr id="PD_whole_treeDescription" name="PD_whole_treeDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_2_row_0')" id="PD_whole_treecol_2_row_0" name="'S1'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>1</b></td></tr>
+<tr id="PD_whole_treecol_2_row_0_raw" name="PD_whole_treecol_2_row_0" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="PD_whole_treeDescription" name="PD_whole_treeDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_2_row_1')" id="PD_whole_treecol_2_row_1" name="'S2'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>2</b></td></tr>
+<tr id="PD_whole_treecol_2_row_1_raw" name="PD_whole_treecol_2_row_1" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="PD_whole_treeDescription" name="PD_whole_treeDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_2_row_2')" id="PD_whole_treecol_2_row_2" name="'S3'">&#x25B6;</td><td>&nbsp;</td><td style="color:#f27304">&#x25A0;&nbsp;</td><td class="data"><b>3</b></td></tr>
+<tr id="PD_whole_treecol_2_row_2_raw" name="PD_whole_treecol_2_row_2" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="PD_whole_treeDescription" name="PD_whole_treeDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_2_row_3')" id="PD_whole_treecol_2_row_3" name="'S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#008000">&#x25A0;&nbsp;</td><td class="data"><b>4</b></td></tr>
+<tr id="PD_whole_treecol_2_row_3_raw" name="PD_whole_treecol_2_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="PD_whole_treeDescription" name="PD_whole_treeDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_2_row_4')" id="PD_whole_treecol_2_row_4" name="'S5'">&#x25B6;</td><td>&nbsp;</td><td style="color:#91278d">&#x25A0;&nbsp;</td><td class="data"><b>5</b></td></tr>
+<tr id="PD_whole_treecol_2_row_4_raw" name="PD_whole_treecol_2_row_4" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="PD_whole_treeDescription" name="PD_whole_treeDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_2_row_5')" id="PD_whole_treecol_2_row_5" name="'S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ffff00">&#x25A0;&nbsp;</td><td class="data"><b>6</b></td></tr>
+<tr id="PD_whole_treecol_2_row_5_raw" name="PD_whole_treecol_2_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="PD_whole_treeSampleID" name="PD_whole_treeSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_0_row_0')" id="PD_whole_treecol_0_row_0" name="'S1'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>S1</b></td></tr>
+<tr id="PD_whole_treecol_0_row_0_raw" name="PD_whole_treecol_0_row_0" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="PD_whole_treeSampleID" name="PD_whole_treeSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_0_row_1')" id="PD_whole_treecol_0_row_1" name="'S2'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>S2</b></td></tr>
+<tr id="PD_whole_treecol_0_row_1_raw" name="PD_whole_treecol_0_row_1" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="PD_whole_treeSampleID" name="PD_whole_treeSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_0_row_2')" id="PD_whole_treecol_0_row_2" name="'S3'">&#x25B6;</td><td>&nbsp;</td><td style="color:#f27304">&#x25A0;&nbsp;</td><td class="data"><b>S3</b></td></tr>
+<tr id="PD_whole_treecol_0_row_2_raw" name="PD_whole_treecol_0_row_2" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="PD_whole_treeSampleID" name="PD_whole_treeSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_0_row_3')" id="PD_whole_treecol_0_row_3" name="'S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#008000">&#x25A0;&nbsp;</td><td class="data"><b>S4</b></td></tr>
+<tr id="PD_whole_treecol_0_row_3_raw" name="PD_whole_treecol_0_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="PD_whole_treeSampleID" name="PD_whole_treeSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_0_row_4')" id="PD_whole_treecol_0_row_4" name="'S5'">&#x25B6;</td><td>&nbsp;</td><td style="color:#91278d">&#x25A0;&nbsp;</td><td class="data"><b>S5</b></td></tr>
+<tr id="PD_whole_treecol_0_row_4_raw" name="PD_whole_treecol_0_row_4" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="PD_whole_treeSampleID" name="PD_whole_treeSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_0_row_5')" id="PD_whole_treecol_0_row_5" name="'S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ffff00">&#x25A0;&nbsp;</td><td class="data"><b>S6</b></td></tr>
+<tr id="PD_whole_treecol_0_row_5_raw" name="PD_whole_treecol_0_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="PD_whole_treeTreatment" name="PD_whole_treeTreatment" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_1_row_3')" id="PD_whole_treecol_1_row_3" name="'S1','S3','S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>drug</b></td></tr>
+<tr id="PD_whole_treecol_1_row_3_raw" name="PD_whole_treecol_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="PD_whole_treecol_1_row_3_raw" name="PD_whole_treecol_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="PD_whole_treecol_1_row_3_raw" name="PD_whole_treecol_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="PD_whole_treeTreatment" name="PD_whole_treeTreatment" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('PD_whole_treecol_1_row_5')" id="PD_whole_treecol_1_row_5" name="'S2','S5','S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>placebo</b></td></tr>
+<tr id="PD_whole_treecol_1_row_5_raw" name="PD_whole_treecol_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="PD_whole_treecol_1_row_5_raw" name="PD_whole_treecol_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="PD_whole_treecol_1_row_5_raw" name="PD_whole_treecol_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="chao1Description" name="chao1Description" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_2_row_0')" id="chao1col_2_row_0" name="'S1'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>1</b></td></tr>
+<tr id="chao1col_2_row_0_raw" name="chao1col_2_row_0" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="chao1Description" name="chao1Description" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_2_row_1')" id="chao1col_2_row_1" name="'S2'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>2</b></td></tr>
+<tr id="chao1col_2_row_1_raw" name="chao1col_2_row_1" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="chao1Description" name="chao1Description" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_2_row_2')" id="chao1col_2_row_2" name="'S3'">&#x25B6;</td><td>&nbsp;</td><td style="color:#f27304">&#x25A0;&nbsp;</td><td class="data"><b>3</b></td></tr>
+<tr id="chao1col_2_row_2_raw" name="chao1col_2_row_2" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="chao1Description" name="chao1Description" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_2_row_3')" id="chao1col_2_row_3" name="'S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#008000">&#x25A0;&nbsp;</td><td class="data"><b>4</b></td></tr>
+<tr id="chao1col_2_row_3_raw" name="chao1col_2_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="chao1Description" name="chao1Description" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_2_row_4')" id="chao1col_2_row_4" name="'S5'">&#x25B6;</td><td>&nbsp;</td><td style="color:#91278d">&#x25A0;&nbsp;</td><td class="data"><b>5</b></td></tr>
+<tr id="chao1col_2_row_4_raw" name="chao1col_2_row_4" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="chao1Description" name="chao1Description" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_2_row_5')" id="chao1col_2_row_5" name="'S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ffff00">&#x25A0;&nbsp;</td><td class="data"><b>6</b></td></tr>
+<tr id="chao1col_2_row_5_raw" name="chao1col_2_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="chao1SampleID" name="chao1SampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_0_row_0')" id="chao1col_0_row_0" name="'S1'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>S1</b></td></tr>
+<tr id="chao1col_0_row_0_raw" name="chao1col_0_row_0" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="chao1SampleID" name="chao1SampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_0_row_1')" id="chao1col_0_row_1" name="'S2'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>S2</b></td></tr>
+<tr id="chao1col_0_row_1_raw" name="chao1col_0_row_1" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="chao1SampleID" name="chao1SampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_0_row_2')" id="chao1col_0_row_2" name="'S3'">&#x25B6;</td><td>&nbsp;</td><td style="color:#f27304">&#x25A0;&nbsp;</td><td class="data"><b>S3</b></td></tr>
+<tr id="chao1col_0_row_2_raw" name="chao1col_0_row_2" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="chao1SampleID" name="chao1SampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_0_row_3')" id="chao1col_0_row_3" name="'S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#008000">&#x25A0;&nbsp;</td><td class="data"><b>S4</b></td></tr>
+<tr id="chao1col_0_row_3_raw" name="chao1col_0_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="chao1SampleID" name="chao1SampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_0_row_4')" id="chao1col_0_row_4" name="'S5'">&#x25B6;</td><td>&nbsp;</td><td style="color:#91278d">&#x25A0;&nbsp;</td><td class="data"><b>S5</b></td></tr>
+<tr id="chao1col_0_row_4_raw" name="chao1col_0_row_4" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="chao1SampleID" name="chao1SampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_0_row_5')" id="chao1col_0_row_5" name="'S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ffff00">&#x25A0;&nbsp;</td><td class="data"><b>S6</b></td></tr>
+<tr id="chao1col_0_row_5_raw" name="chao1col_0_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="chao1Treatment" name="chao1Treatment" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_1_row_3')" id="chao1col_1_row_3" name="'S1','S3','S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>drug</b></td></tr>
+<tr id="chao1col_1_row_3_raw" name="chao1col_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="chao1col_1_row_3_raw" name="chao1col_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="chao1col_1_row_3_raw" name="chao1col_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="chao1Treatment" name="chao1Treatment" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('chao1col_1_row_5')" id="chao1col_1_row_5" name="'S2','S5','S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>placebo</b></td></tr>
+<tr id="chao1col_1_row_5_raw" name="chao1col_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="chao1col_1_row_5_raw" name="chao1col_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="chao1col_1_row_5_raw" name="chao1col_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="observed_otusDescription" name="observed_otusDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_2_row_0')" id="observed_otuscol_2_row_0" name="'S1'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>1</b></td></tr>
+<tr id="observed_otuscol_2_row_0_raw" name="observed_otuscol_2_row_0" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="observed_otusDescription" name="observed_otusDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_2_row_1')" id="observed_otuscol_2_row_1" name="'S2'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>2</b></td></tr>
+<tr id="observed_otuscol_2_row_1_raw" name="observed_otuscol_2_row_1" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="observed_otusDescription" name="observed_otusDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_2_row_2')" id="observed_otuscol_2_row_2" name="'S3'">&#x25B6;</td><td>&nbsp;</td><td style="color:#f27304">&#x25A0;&nbsp;</td><td class="data"><b>3</b></td></tr>
+<tr id="observed_otuscol_2_row_2_raw" name="observed_otuscol_2_row_2" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="observed_otusDescription" name="observed_otusDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_2_row_3')" id="observed_otuscol_2_row_3" name="'S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#008000">&#x25A0;&nbsp;</td><td class="data"><b>4</b></td></tr>
+<tr id="observed_otuscol_2_row_3_raw" name="observed_otuscol_2_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="observed_otusDescription" name="observed_otusDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_2_row_4')" id="observed_otuscol_2_row_4" name="'S5'">&#x25B6;</td><td>&nbsp;</td><td style="color:#91278d">&#x25A0;&nbsp;</td><td class="data"><b>5</b></td></tr>
+<tr id="observed_otuscol_2_row_4_raw" name="observed_otuscol_2_row_4" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="observed_otusDescription" name="observed_otusDescription" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_2_row_5')" id="observed_otuscol_2_row_5" name="'S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ffff00">&#x25A0;&nbsp;</td><td class="data"><b>6</b></td></tr>
+<tr id="observed_otuscol_2_row_5_raw" name="observed_otuscol_2_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="observed_otusSampleID" name="observed_otusSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_0_row_0')" id="observed_otuscol_0_row_0" name="'S1'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>S1</b></td></tr>
+<tr id="observed_otuscol_0_row_0_raw" name="observed_otuscol_0_row_0" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="observed_otusSampleID" name="observed_otusSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_0_row_1')" id="observed_otuscol_0_row_1" name="'S2'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>S2</b></td></tr>
+<tr id="observed_otuscol_0_row_1_raw" name="observed_otuscol_0_row_1" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="observed_otusSampleID" name="observed_otusSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_0_row_2')" id="observed_otuscol_0_row_2" name="'S3'">&#x25B6;</td><td>&nbsp;</td><td style="color:#f27304">&#x25A0;&nbsp;</td><td class="data"><b>S3</b></td></tr>
+<tr id="observed_otuscol_0_row_2_raw" name="observed_otuscol_0_row_2" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="observed_otusSampleID" name="observed_otusSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_0_row_3')" id="observed_otuscol_0_row_3" name="'S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#008000">&#x25A0;&nbsp;</td><td class="data"><b>S4</b></td></tr>
+<tr id="observed_otuscol_0_row_3_raw" name="observed_otuscol_0_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="observed_otusSampleID" name="observed_otusSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_0_row_4')" id="observed_otuscol_0_row_4" name="'S5'">&#x25B6;</td><td>&nbsp;</td><td style="color:#91278d">&#x25A0;&nbsp;</td><td class="data"><b>S5</b></td></tr>
+<tr id="observed_otuscol_0_row_4_raw" name="observed_otuscol_0_row_4" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="observed_otusSampleID" name="observed_otusSampleID" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_0_row_5')" id="observed_otuscol_0_row_5" name="'S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ffff00">&#x25A0;&nbsp;</td><td class="data"><b>S6</b></td></tr>
+<tr id="observed_otuscol_0_row_5_raw" name="observed_otuscol_0_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+<tr id="observed_otusTreatment" name="observed_otusTreatment" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_1_row_3')" id="observed_otuscol_1_row_3" name="'S1','S3','S4'">&#x25B6;</td><td>&nbsp;</td><td style="color:#ff0000">&#x25A0;&nbsp;</td><td class="data"><b>drug</b></td></tr>
+<tr id="observed_otuscol_1_row_3_raw" name="observed_otuscol_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ff0000">&#x25C6;</td><td class="data" align="left"><b>S1</b></td></tr>
+<tr id="observed_otuscol_1_row_3_raw" name="observed_otuscol_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#f27304">&#x25C6;</td><td class="data" align="left"><b>S3</b></td></tr>
+<tr id="observed_otuscol_1_row_3_raw" name="observed_otuscol_1_row_3" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#008000">&#x25C6;</td><td class="data" align="left"><b>S4</b></td></tr>
+<tr id="observed_otusTreatment" name="observed_otusTreatment" style="display: none;"><td class="data" onmouseover="document.body.style.cursor='pointer'"  onmouseout="document.body.style.cursor='default'" onclick="toggle('observed_otuscol_1_row_5')" id="observed_otuscol_1_row_5" name="'S2','S5','S6'">&#x25B6;</td><td>&nbsp;</td><td style="color:#0000ff">&#x25A0;&nbsp;</td><td class="data"><b>placebo</b></td></tr>
+<tr id="observed_otuscol_1_row_5_raw" name="observed_otuscol_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#0000ff">&#x25C6;</td><td class="data" align="left"><b>S2</b></td></tr>
+<tr id="observed_otuscol_1_row_5_raw" name="observed_otuscol_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#91278d">&#x25C6;</td><td class="data" align="left"><b>S5</b></td></tr>
+<tr id="observed_otuscol_1_row_5_raw" name="observed_otuscol_1_row_5" style="display: none;"><td class="data" align="right">&#x221F;</td><td></td><td style="color:#ffff00">&#x25C6;</td><td class="data" align="left"><b>S6</b></td></tr>
+</table></div></div>
+<div style="position:relative;clear:both;">
+<div style="position:relative;clear:both;display:none;" class="strong" id="nan_disclaimer">
+<b>If the lines for some categories do not extend all the way to the right end of the x-axis, that means that at least one of the samples in that category does not have that many sequences.</b>
+</div>
+<br><br>
+<table id="rare_data" border="1px">
+<tr name="Treatment" style="display: none;"><td class="headers">Treatment</td><td class="headers">Seqs/Sample</td>
+<td class="headers">PD_whole_tree Ave.</td><td class="headers">PD_whole_tree Err.</td>
+<td class="headers">chao1 Ave.</td><td class="headers">chao1 Err.</td>
+<td class="headers">observed_otus Ave.</td><td class="headers">observed_otus Err.</td>
+</tr>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">10.0</td>
+<td class="data">     1.304</td><td class="data">     0.026</td>
+<td class="data">    19.217</td><td class="data">     0.910</td>
+<td class="data">     8.000</td><td class="data">     0.163</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">209.0</td>
+<td class="data">     3.292</td><td class="data">     0.205</td>
+<td class="data">    45.103</td><td class="data">     3.184</td>
+<td class="data">    36.067</td><td class="data">     3.040</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">408.0</td>
+<td class="data">     3.696</td><td class="data">     0.189</td>
+<td class="data">    50.541</td><td class="data">     0.758</td>
+<td class="data">    42.733</td><td class="data">     1.826</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">607.0</td>
+<td class="data">     3.924</td><td class="data">     0.127</td>
+<td class="data">    55.004</td><td class="data">     5.083</td>
+<td class="data">    46.067</td><td class="data">     1.517</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">806.0</td>
+<td class="data">     3.977</td><td class="data">     0.141</td>
+<td class="data">    55.004</td><td class="data">     2.169</td>
+<td class="data">    48.033</td><td class="data">     1.195</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">1005.0</td>
+<td class="data">     4.133</td><td class="data">     0.084</td>
+<td class="data">    60.543</td><td class="data">     8.811</td>
+<td class="data">    50.600</td><td class="data">     1.236</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">1204.0</td>
+<td class="data">     4.275</td><td class="data">     0.179</td>
+<td class="data">    62.083</td><td class="data">     5.115</td>
+<td class="data">    52.567</td><td class="data">     2.007</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">1403.0</td>
+<td class="data">     4.307</td><td class="data">     0.103</td>
+<td class="data">    61.639</td><td class="data">     2.866</td>
+<td class="data">    53.567</td><td class="data">     1.109</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">1602.0</td>
+<td class="data">     4.396</td><td class="data">     0.172</td>
+<td class="data">    63.458</td><td class="data">     4.523</td>
+<td class="data">    54.533</td><td class="data">     2.269</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">1801.0</td>
+<td class="data">     4.454</td><td class="data">     0.174</td>
+<td class="data">    61.625</td><td class="data">     4.027</td>
+<td class="data">    55.467</td><td class="data">     2.007</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#ff0000">drug</td><td class="data">2000.0</td>
+<td class="data">     4.485</td><td class="data">     0.172</td>
+<td class="data">    66.480</td><td class="data">     2.684</td>
+<td class="data">    56.500</td><td class="data">     1.768</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">10.0</td>
+<td class="data">     1.422</td><td class="data">     0.109</td>
+<td class="data">    16.333</td><td class="data">     3.372</td>
+<td class="data">     7.767</td><td class="data">     0.309</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">209.0</td>
+<td class="data">     3.233</td><td class="data">     0.100</td>
+<td class="data">    44.272</td><td class="data">     4.727</td>
+<td class="data">    34.067</td><td class="data">     0.953</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">408.0</td>
+<td class="data">     3.457</td><td class="data">     0.157</td>
+<td class="data">    44.978</td><td class="data">     1.126</td>
+<td class="data">    39.033</td><td class="data">     1.438</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">607.0</td>
+<td class="data">     3.667</td><td class="data">     0.178</td>
+<td class="data">    49.941</td><td class="data">     3.589</td>
+<td class="data">    42.167</td><td class="data">     1.862</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">806.0</td>
+<td class="data">     3.774</td><td class="data">     0.080</td>
+<td class="data">    50.473</td><td class="data">     0.784</td>
+<td class="data">    44.533</td><td class="data">     1.087</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">1005.0</td>
+<td class="data">     3.818</td><td class="data">     0.057</td>
+<td class="data">    49.233</td><td class="data">     0.975</td>
+<td class="data">    45.200</td><td class="data">     1.431</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">1204.0</td>
+<td class="data">     3.885</td><td class="data">     0.097</td>
+<td class="data">    52.680</td><td class="data">     1.379</td>
+<td class="data">    46.667</td><td class="data">     1.668</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">1403.0</td>
+<td class="data">     3.940</td><td class="data">     0.039</td>
+<td class="data">    52.090</td><td class="data">     2.142</td>
+<td class="data">    47.667</td><td class="data">     1.053</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">1602.0</td>
+<td class="data">     4.012</td><td class="data">     0.034</td>
+<td class="data">    52.415</td><td class="data">     1.786</td>
+<td class="data">    48.600</td><td class="data">     1.186</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">1801.0</td>
+<td class="data">     4.066</td><td class="data">     0.059</td>
+<td class="data">    54.444</td><td class="data">     3.299</td>
+<td class="data">    49.433</td><td class="data">     0.957</td>
+<tr name="Treatment" style="display: none;">
+<td class="data" bgcolor="#0000ff">placebo</td><td class="data">2000.0</td>
+<td class="data">     4.076</td><td class="data">     0.049</td>
+<td class="data">    53.691</td><td class="data">     1.648</td>
+<td class="data">    50.000</td><td class="data">     0.990</td>
+</tr>
+<tr name="Description" style="display: none;"><td class="headers">Description</td><td class="headers">Seqs/Sample</td>
+<td class="headers">PD_whole_tree Ave.</td><td class="headers">PD_whole_tree Err.</td>
+<td class="headers">chao1 Ave.</td><td class="headers">chao1 Err.</td>
+<td class="headers">observed_otus Ave.</td><td class="headers">observed_otus Err.</td>
+</tr>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">10.0</td>
+<td class="data">     1.295</td><td class="data">       nan</td>
+<td class="data">    18.500</td><td class="data">       nan</td>
+<td class="data">     8.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">209.0</td>
+<td class="data">     3.039</td><td class="data">       nan</td>
+<td class="data">    41.315</td><td class="data">       nan</td>
+<td class="data">    33.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">408.0</td>
+<td class="data">     3.456</td><td class="data">       nan</td>
+<td class="data">    51.596</td><td class="data">       nan</td>
+<td class="data">    41.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">607.0</td>
+<td class="data">     3.780</td><td class="data">       nan</td>
+<td class="data">    61.945</td><td class="data">       nan</td>
+<td class="data">    45.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">806.0</td>
+<td class="data">     3.827</td><td class="data">       nan</td>
+<td class="data">    57.927</td><td class="data">       nan</td>
+<td class="data">    47.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">1005.0</td>
+<td class="data">     4.107</td><td class="data">       nan</td>
+<td class="data">    72.993</td><td class="data">       nan</td>
+<td class="data">    51.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">1204.0</td>
+<td class="data">     4.297</td><td class="data">       nan</td>
+<td class="data">    64.941</td><td class="data">       nan</td>
+<td class="data">    53.400</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">1403.0</td>
+<td class="data">     4.299</td><td class="data">       nan</td>
+<td class="data">    64.413</td><td class="data">       nan</td>
+<td class="data">    54.400</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">1602.0</td>
+<td class="data">     4.481</td><td class="data">       nan</td>
+<td class="data">    65.505</td><td class="data">       nan</td>
+<td class="data">    56.700</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">1801.0</td>
+<td class="data">     4.556</td><td class="data">       nan</td>
+<td class="data">    65.588</td><td class="data">       nan</td>
+<td class="data">    57.400</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ff0000">1</td><td class="data">2000.0</td>
+<td class="data">     4.671</td><td class="data">       nan</td>
+<td class="data">    69.683</td><td class="data">       nan</td>
+<td class="data">    58.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">10.0</td>
+<td class="data">     1.270</td><td class="data">       nan</td>
+<td class="data">    13.150</td><td class="data">       nan</td>
+<td class="data">     7.600</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">209.0</td>
+<td class="data">     3.093</td><td class="data">       nan</td>
+<td class="data">    50.929</td><td class="data">       nan</td>
+<td class="data">    34.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">408.0</td>
+<td class="data">     3.237</td><td class="data">       nan</td>
+<td class="data">    43.962</td><td class="data">       nan</td>
+<td class="data">    38.500</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">607.0</td>
+<td class="data">     3.418</td><td class="data">       nan</td>
+<td class="data">    47.025</td><td class="data">       nan</td>
+<td class="data">    40.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">806.0</td>
+<td class="data">     3.662</td><td class="data">       nan</td>
+<td class="data">    51.575</td><td class="data">       nan</td>
+<td class="data">    44.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">1005.0</td>
+<td class="data">     3.737</td><td class="data">       nan</td>
+<td class="data">    49.779</td><td class="data">       nan</td>
+<td class="data">    45.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">1204.0</td>
+<td class="data">     3.748</td><td class="data">       nan</td>
+<td class="data">    51.350</td><td class="data">       nan</td>
+<td class="data">    45.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">1403.0</td>
+<td class="data">     3.885</td><td class="data">       nan</td>
+<td class="data">    54.995</td><td class="data">       nan</td>
+<td class="data">    47.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">1602.0</td>
+<td class="data">     4.059</td><td class="data">       nan</td>
+<td class="data">    54.728</td><td class="data">       nan</td>
+<td class="data">    48.700</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">1801.0</td>
+<td class="data">     4.149</td><td class="data">       nan</td>
+<td class="data">    59.103</td><td class="data">       nan</td>
+<td class="data">    49.900</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#0000ff">2</td><td class="data">2000.0</td>
+<td class="data">     4.141</td><td class="data">       nan</td>
+<td class="data">    55.875</td><td class="data">       nan</td>
+<td class="data">    50.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">10.0</td>
+<td class="data">     1.340</td><td class="data">       nan</td>
+<td class="data">    20.500</td><td class="data">       nan</td>
+<td class="data">     8.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">209.0</td>
+<td class="data">     3.540</td><td class="data">       nan</td>
+<td class="data">    49.107</td><td class="data">       nan</td>
+<td class="data">    40.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">408.0</td>
+<td class="data">     3.918</td><td class="data">       nan</td>
+<td class="data">    50.173</td><td class="data">       nan</td>
+<td class="data">    45.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">607.0</td>
+<td class="data">     4.089</td><td class="data">       nan</td>
+<td class="data">    53.153</td><td class="data">       nan</td>
+<td class="data">    48.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">806.0</td>
+<td class="data">     4.165</td><td class="data">       nan</td>
+<td class="data">    54.350</td><td class="data">       nan</td>
+<td class="data">    49.600</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">1005.0</td>
+<td class="data">     4.247</td><td class="data">       nan</td>
+<td class="data">    53.871</td><td class="data">       nan</td>
+<td class="data">    51.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">1204.0</td>
+<td class="data">     4.482</td><td class="data">       nan</td>
+<td class="data">    66.408</td><td class="data">       nan</td>
+<td class="data">    54.500</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">1403.0</td>
+<td class="data">     4.437</td><td class="data">       nan</td>
+<td class="data">    62.812</td><td class="data">       nan</td>
+<td class="data">    54.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">1602.0</td>
+<td class="data">     4.550</td><td class="data">       nan</td>
+<td class="data">    67.683</td><td class="data">       nan</td>
+<td class="data">    55.500</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">1801.0</td>
+<td class="data">     4.597</td><td class="data">       nan</td>
+<td class="data">    63.187</td><td class="data">       nan</td>
+<td class="data">    56.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#f27304">3</td><td class="data">2000.0</td>
+<td class="data">     4.529</td><td class="data">       nan</td>
+<td class="data">    63.115</td><td class="data">       nan</td>
+<td class="data">    56.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">10.0</td>
+<td class="data">     1.278</td><td class="data">       nan</td>
+<td class="data">    18.650</td><td class="data">       nan</td>
+<td class="data">     7.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">209.0</td>
+<td class="data">     3.296</td><td class="data">       nan</td>
+<td class="data">    44.888</td><td class="data">       nan</td>
+<td class="data">    34.600</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">408.0</td>
+<td class="data">     3.716</td><td class="data">       nan</td>
+<td class="data">    49.853</td><td class="data">       nan</td>
+<td class="data">    41.700</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">607.0</td>
+<td class="data">     3.902</td><td class="data">       nan</td>
+<td class="data">    49.913</td><td class="data">       nan</td>
+<td class="data">    44.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">806.0</td>
+<td class="data">     3.940</td><td class="data">       nan</td>
+<td class="data">    52.737</td><td class="data">       nan</td>
+<td class="data">    46.700</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">1005.0</td>
+<td class="data">     4.047</td><td class="data">       nan</td>
+<td class="data">    54.765</td><td class="data">       nan</td>
+<td class="data">    48.900</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">1204.0</td>
+<td class="data">     4.046</td><td class="data">       nan</td>
+<td class="data">    54.900</td><td class="data">       nan</td>
+<td class="data">    49.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">1403.0</td>
+<td class="data">     4.185</td><td class="data">       nan</td>
+<td class="data">    57.692</td><td class="data">       nan</td>
+<td class="data">    52.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">1602.0</td>
+<td class="data">     4.157</td><td class="data">       nan</td>
+<td class="data">    57.187</td><td class="data">       nan</td>
+<td class="data">    51.400</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">1801.0</td>
+<td class="data">     4.209</td><td class="data">       nan</td>
+<td class="data">    56.102</td><td class="data">       nan</td>
+<td class="data">    52.700</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#008000">4</td><td class="data">2000.0</td>
+<td class="data">     4.255</td><td class="data">       nan</td>
+<td class="data">    66.643</td><td class="data">       nan</td>
+<td class="data">    54.500</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">10.0</td>
+<td class="data">     1.481</td><td class="data">       nan</td>
+<td class="data">    21.000</td><td class="data">       nan</td>
+<td class="data">     8.200</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">209.0</td>
+<td class="data">     3.290</td><td class="data">       nan</td>
+<td class="data">    40.412</td><td class="data">       nan</td>
+<td class="data">    35.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">408.0</td>
+<td class="data">     3.590</td><td class="data">       nan</td>
+<td class="data">    46.547</td><td class="data">       nan</td>
+<td class="data">    41.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">607.0</td>
+<td class="data">     3.819</td><td class="data">       nan</td>
+<td class="data">    47.802</td><td class="data">       nan</td>
+<td class="data">    44.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">806.0</td>
+<td class="data">     3.822</td><td class="data">       nan</td>
+<td class="data">    50.028</td><td class="data">       nan</td>
+<td class="data">    46.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">1005.0</td>
+<td class="data">     3.868</td><td class="data">       nan</td>
+<td class="data">    50.056</td><td class="data">       nan</td>
+<td class="data">    47.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">1204.0</td>
+<td class="data">     3.958</td><td class="data">       nan</td>
+<td class="data">    54.579</td><td class="data">       nan</td>
+<td class="data">    49.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">1403.0</td>
+<td class="data">     3.966</td><td class="data">       nan</td>
+<td class="data">    51.383</td><td class="data">       nan</td>
+<td class="data">    49.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">1602.0</td>
+<td class="data">     3.999</td><td class="data">       nan</td>
+<td class="data">    52.139</td><td class="data">       nan</td>
+<td class="data">    50.000</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">1801.0</td>
+<td class="data">     4.030</td><td class="data">       nan</td>
+<td class="data">    52.336</td><td class="data">       nan</td>
+<td class="data">    50.300</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#91278d">5</td><td class="data">2000.0</td>
+<td class="data">     4.064</td><td class="data">       nan</td>
+<td class="data">    53.303</td><td class="data">       nan</td>
+<td class="data">    51.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">10.0</td>
+<td class="data">     1.516</td><td class="data">       nan</td>
+<td class="data">    14.850</td><td class="data">       nan</td>
+<td class="data">     7.500</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">209.0</td>
+<td class="data">     3.317</td><td class="data">       nan</td>
+<td class="data">    41.476</td><td class="data">       nan</td>
+<td class="data">    32.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">408.0</td>
+<td class="data">     3.544</td><td class="data">       nan</td>
+<td class="data">    44.424</td><td class="data">       nan</td>
+<td class="data">    37.600</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">607.0</td>
+<td class="data">     3.765</td><td class="data">       nan</td>
+<td class="data">    54.997</td><td class="data">       nan</td>
+<td class="data">    40.900</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">806.0</td>
+<td class="data">     3.838</td><td class="data">       nan</td>
+<td class="data">    49.816</td><td class="data">       nan</td>
+<td class="data">    43.400</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">1005.0</td>
+<td class="data">     3.848</td><td class="data">       nan</td>
+<td class="data">    47.863</td><td class="data">       nan</td>
+<td class="data">    43.500</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">1204.0</td>
+<td class="data">     3.950</td><td class="data">       nan</td>
+<td class="data">    52.109</td><td class="data">       nan</td>
+<td class="data">    45.800</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">1403.0</td>
+<td class="data">     3.969</td><td class="data">       nan</td>
+<td class="data">    49.892</td><td class="data">       nan</td>
+<td class="data">    46.600</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">1602.0</td>
+<td class="data">     3.978</td><td class="data">       nan</td>
+<td class="data">    50.379</td><td class="data">       nan</td>
+<td class="data">    47.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">1801.0</td>
+<td class="data">     4.018</td><td class="data">       nan</td>
+<td class="data">    51.894</td><td class="data">       nan</td>
+<td class="data">    48.100</td><td class="data">       nan</td>
+<tr name="Description" style="display: none;">
+<td class="data" bgcolor="#ffff00">6</td><td class="data">2000.0</td>
+<td class="data">     4.023</td><td class="data">       nan</td>
+<td class="data">    51.893</td><td class="data">       nan</td>
+<td class="data">    48.700</td><td class="data">       nan</td>
+</tr>
+<tr name="SampleID" style="display: none;"><td class="headers">SampleID</td><td class="headers">Seqs/Sample</td>
+<td class="headers">PD_whole_tree Ave.</td><td class="headers">PD_whole_tree Err.</td>
+<td class="headers">chao1 Ave.</td><td class="headers">chao1 Err.</td>
+<td class="headers">observed_otus Ave.</td><td class="headers">observed_otus Err.</td>
+</tr>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">10.0</td>
+<td class="data">     1.295</td><td class="data">       nan</td>
+<td class="data">    18.500</td><td class="data">       nan</td>
+<td class="data">     8.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">209.0</td>
+<td class="data">     3.039</td><td class="data">       nan</td>
+<td class="data">    41.315</td><td class="data">       nan</td>
+<td class="data">    33.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">408.0</td>
+<td class="data">     3.456</td><td class="data">       nan</td>
+<td class="data">    51.596</td><td class="data">       nan</td>
+<td class="data">    41.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">607.0</td>
+<td class="data">     3.780</td><td class="data">       nan</td>
+<td class="data">    61.945</td><td class="data">       nan</td>
+<td class="data">    45.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">806.0</td>
+<td class="data">     3.827</td><td class="data">       nan</td>
+<td class="data">    57.927</td><td class="data">       nan</td>
+<td class="data">    47.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">1005.0</td>
+<td class="data">     4.107</td><td class="data">       nan</td>
+<td class="data">    72.993</td><td class="data">       nan</td>
+<td class="data">    51.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">1204.0</td>
+<td class="data">     4.297</td><td class="data">       nan</td>
+<td class="data">    64.941</td><td class="data">       nan</td>
+<td class="data">    53.400</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">1403.0</td>
+<td class="data">     4.299</td><td class="data">       nan</td>
+<td class="data">    64.413</td><td class="data">       nan</td>
+<td class="data">    54.400</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">1602.0</td>
+<td class="data">     4.481</td><td class="data">       nan</td>
+<td class="data">    65.505</td><td class="data">       nan</td>
+<td class="data">    56.700</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">1801.0</td>
+<td class="data">     4.556</td><td class="data">       nan</td>
+<td class="data">    65.588</td><td class="data">       nan</td>
+<td class="data">    57.400</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ff0000">S1</td><td class="data">2000.0</td>
+<td class="data">     4.671</td><td class="data">       nan</td>
+<td class="data">    69.683</td><td class="data">       nan</td>
+<td class="data">    58.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">10.0</td>
+<td class="data">     1.270</td><td class="data">       nan</td>
+<td class="data">    13.150</td><td class="data">       nan</td>
+<td class="data">     7.600</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">209.0</td>
+<td class="data">     3.093</td><td class="data">       nan</td>
+<td class="data">    50.929</td><td class="data">       nan</td>
+<td class="data">    34.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">408.0</td>
+<td class="data">     3.237</td><td class="data">       nan</td>
+<td class="data">    43.962</td><td class="data">       nan</td>
+<td class="data">    38.500</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">607.0</td>
+<td class="data">     3.418</td><td class="data">       nan</td>
+<td class="data">    47.025</td><td class="data">       nan</td>
+<td class="data">    40.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">806.0</td>
+<td class="data">     3.662</td><td class="data">       nan</td>
+<td class="data">    51.575</td><td class="data">       nan</td>
+<td class="data">    44.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">1005.0</td>
+<td class="data">     3.737</td><td class="data">       nan</td>
+<td class="data">    49.779</td><td class="data">       nan</td>
+<td class="data">    45.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">1204.0</td>
+<td class="data">     3.748</td><td class="data">       nan</td>
+<td class="data">    51.350</td><td class="data">       nan</td>
+<td class="data">    45.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">1403.0</td>
+<td class="data">     3.885</td><td class="data">       nan</td>
+<td class="data">    54.995</td><td class="data">       nan</td>
+<td class="data">    47.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">1602.0</td>
+<td class="data">     4.059</td><td class="data">       nan</td>
+<td class="data">    54.728</td><td class="data">       nan</td>
+<td class="data">    48.700</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">1801.0</td>
+<td class="data">     4.149</td><td class="data">       nan</td>
+<td class="data">    59.103</td><td class="data">       nan</td>
+<td class="data">    49.900</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#0000ff">S2</td><td class="data">2000.0</td>
+<td class="data">     4.141</td><td class="data">       nan</td>
+<td class="data">    55.875</td><td class="data">       nan</td>
+<td class="data">    50.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">10.0</td>
+<td class="data">     1.340</td><td class="data">       nan</td>
+<td class="data">    20.500</td><td class="data">       nan</td>
+<td class="data">     8.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">209.0</td>
+<td class="data">     3.540</td><td class="data">       nan</td>
+<td class="data">    49.107</td><td class="data">       nan</td>
+<td class="data">    40.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">408.0</td>
+<td class="data">     3.918</td><td class="data">       nan</td>
+<td class="data">    50.173</td><td class="data">       nan</td>
+<td class="data">    45.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">607.0</td>
+<td class="data">     4.089</td><td class="data">       nan</td>
+<td class="data">    53.153</td><td class="data">       nan</td>
+<td class="data">    48.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">806.0</td>
+<td class="data">     4.165</td><td class="data">       nan</td>
+<td class="data">    54.350</td><td class="data">       nan</td>
+<td class="data">    49.600</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">1005.0</td>
+<td class="data">     4.247</td><td class="data">       nan</td>
+<td class="data">    53.871</td><td class="data">       nan</td>
+<td class="data">    51.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">1204.0</td>
+<td class="data">     4.482</td><td class="data">       nan</td>
+<td class="data">    66.408</td><td class="data">       nan</td>
+<td class="data">    54.500</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">1403.0</td>
+<td class="data">     4.437</td><td class="data">       nan</td>
+<td class="data">    62.812</td><td class="data">       nan</td>
+<td class="data">    54.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">1602.0</td>
+<td class="data">     4.550</td><td class="data">       nan</td>
+<td class="data">    67.683</td><td class="data">       nan</td>
+<td class="data">    55.500</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">1801.0</td>
+<td class="data">     4.597</td><td class="data">       nan</td>
+<td class="data">    63.187</td><td class="data">       nan</td>
+<td class="data">    56.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#f27304">S3</td><td class="data">2000.0</td>
+<td class="data">     4.529</td><td class="data">       nan</td>
+<td class="data">    63.115</td><td class="data">       nan</td>
+<td class="data">    56.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">10.0</td>
+<td class="data">     1.278</td><td class="data">       nan</td>
+<td class="data">    18.650</td><td class="data">       nan</td>
+<td class="data">     7.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">209.0</td>
+<td class="data">     3.296</td><td class="data">       nan</td>
+<td class="data">    44.888</td><td class="data">       nan</td>
+<td class="data">    34.600</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">408.0</td>
+<td class="data">     3.716</td><td class="data">       nan</td>
+<td class="data">    49.853</td><td class="data">       nan</td>
+<td class="data">    41.700</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">607.0</td>
+<td class="data">     3.902</td><td class="data">       nan</td>
+<td class="data">    49.913</td><td class="data">       nan</td>
+<td class="data">    44.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">806.0</td>
+<td class="data">     3.940</td><td class="data">       nan</td>
+<td class="data">    52.737</td><td class="data">       nan</td>
+<td class="data">    46.700</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">1005.0</td>
+<td class="data">     4.047</td><td class="data">       nan</td>
+<td class="data">    54.765</td><td class="data">       nan</td>
+<td class="data">    48.900</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">1204.0</td>
+<td class="data">     4.046</td><td class="data">       nan</td>
+<td class="data">    54.900</td><td class="data">       nan</td>
+<td class="data">    49.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">1403.0</td>
+<td class="data">     4.185</td><td class="data">       nan</td>
+<td class="data">    57.692</td><td class="data">       nan</td>
+<td class="data">    52.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">1602.0</td>
+<td class="data">     4.157</td><td class="data">       nan</td>
+<td class="data">    57.187</td><td class="data">       nan</td>
+<td class="data">    51.400</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">1801.0</td>
+<td class="data">     4.209</td><td class="data">       nan</td>
+<td class="data">    56.102</td><td class="data">       nan</td>
+<td class="data">    52.700</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#008000">S4</td><td class="data">2000.0</td>
+<td class="data">     4.255</td><td class="data">       nan</td>
+<td class="data">    66.643</td><td class="data">       nan</td>
+<td class="data">    54.500</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">10.0</td>
+<td class="data">     1.481</td><td class="data">       nan</td>
+<td class="data">    21.000</td><td class="data">       nan</td>
+<td class="data">     8.200</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">209.0</td>
+<td class="data">     3.290</td><td class="data">       nan</td>
+<td class="data">    40.412</td><td class="data">       nan</td>
+<td class="data">    35.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">408.0</td>
+<td class="data">     3.590</td><td class="data">       nan</td>
+<td class="data">    46.547</td><td class="data">       nan</td>
+<td class="data">    41.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">607.0</td>
+<td class="data">     3.819</td><td class="data">       nan</td>
+<td class="data">    47.802</td><td class="data">       nan</td>
+<td class="data">    44.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">806.0</td>
+<td class="data">     3.822</td><td class="data">       nan</td>
+<td class="data">    50.028</td><td class="data">       nan</td>
+<td class="data">    46.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">1005.0</td>
+<td class="data">     3.868</td><td class="data">       nan</td>
+<td class="data">    50.056</td><td class="data">       nan</td>
+<td class="data">    47.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">1204.0</td>
+<td class="data">     3.958</td><td class="data">       nan</td>
+<td class="data">    54.579</td><td class="data">       nan</td>
+<td class="data">    49.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">1403.0</td>
+<td class="data">     3.966</td><td class="data">       nan</td>
+<td class="data">    51.383</td><td class="data">       nan</td>
+<td class="data">    49.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">1602.0</td>
+<td class="data">     3.999</td><td class="data">       nan</td>
+<td class="data">    52.139</td><td class="data">       nan</td>
+<td class="data">    50.000</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">1801.0</td>
+<td class="data">     4.030</td><td class="data">       nan</td>
+<td class="data">    52.336</td><td class="data">       nan</td>
+<td class="data">    50.300</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#91278d">S5</td><td class="data">2000.0</td>
+<td class="data">     4.064</td><td class="data">       nan</td>
+<td class="data">    53.303</td><td class="data">       nan</td>
+<td class="data">    51.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">10.0</td>
+<td class="data">     1.516</td><td class="data">       nan</td>
+<td class="data">    14.850</td><td class="data">       nan</td>
+<td class="data">     7.500</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">209.0</td>
+<td class="data">     3.317</td><td class="data">       nan</td>
+<td class="data">    41.476</td><td class="data">       nan</td>
+<td class="data">    32.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">408.0</td>
+<td class="data">     3.544</td><td class="data">       nan</td>
+<td class="data">    44.424</td><td class="data">       nan</td>
+<td class="data">    37.600</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">607.0</td>
+<td class="data">     3.765</td><td class="data">       nan</td>
+<td class="data">    54.997</td><td class="data">       nan</td>
+<td class="data">    40.900</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">806.0</td>
+<td class="data">     3.838</td><td class="data">       nan</td>
+<td class="data">    49.816</td><td class="data">       nan</td>
+<td class="data">    43.400</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">1005.0</td>
+<td class="data">     3.848</td><td class="data">       nan</td>
+<td class="data">    47.863</td><td class="data">       nan</td>
+<td class="data">    43.500</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">1204.0</td>
+<td class="data">     3.950</td><td class="data">       nan</td>
+<td class="data">    52.109</td><td class="data">       nan</td>
+<td class="data">    45.800</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">1403.0</td>
+<td class="data">     3.969</td><td class="data">       nan</td>
+<td class="data">    49.892</td><td class="data">       nan</td>
+<td class="data">    46.600</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">1602.0</td>
+<td class="data">     3.978</td><td class="data">       nan</td>
+<td class="data">    50.379</td><td class="data">       nan</td>
+<td class="data">    47.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">1801.0</td>
+<td class="data">     4.018</td><td class="data">       nan</td>
+<td class="data">    51.894</td><td class="data">       nan</td>
+<td class="data">    48.100</td><td class="data">       nan</td>
+<tr name="SampleID" style="display: none;">
+<td class="data" bgcolor="#ffff00">S6</td><td class="data">2000.0</td>
+<td class="data">     4.023</td><td class="data">       nan</td>
+<td class="data">    51.893</td><td class="data">       nan</td>
+<td class="data">    48.700</td><td class="data">       nan</td>
+</tr>
+</table>
+</div>
+</div>
+</body>
+</html>

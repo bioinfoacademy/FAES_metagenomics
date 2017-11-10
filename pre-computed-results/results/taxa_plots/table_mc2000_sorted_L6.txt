@@ -1,0 +1,25 @@
+# Constructed from biom file
+#OTU ID	S1	S2	S3	S4	S5	S6
+k__Bacteria;p__Actinobacteria;c__Coriobacteriia;o__Coriobacteriales;f__Coriobacteriaceae;g__Adlercreutzia	0.00032041012496	0.0	0.000953895071542	0.00210970464135	0.00788117611397	0.01329001772
+k__Bacteria;p__Bacteroidetes;c__Bacteroidia;o__Bacteroidales;f__Bacteroidaceae;g__Bacteroides	0.247677026594	0.310649880912	0.153577106518	0.284508740205	0.159139133071	0.119019492026
+k__Bacteria;p__Bacteroidetes;c__Bacteroidia;o__Bacteroidales;f__Porphyromonadaceae;g__Parabacteroides	0.04005126562	0.050697516162	0.0639109697933	0.0593731163351	0.0360715368293	0.0274660366214
+k__Bacteria;p__Bacteroidetes;c__Bacteroidia;o__Bacteroidales;f__Rikenellaceae;g__	0.016340916373	0.0180333446751	0.0149443561208	0.0223025919228	0.0339496817217	0.0342587123449
+k__Bacteria;p__Bacteroidetes;c__Bacteroidia;o__Bacteroidales;f__S24-7;g__	0.320730535085	0.272201429058	0.266454689984	0.296262808921	0.327675053046	0.371529828706
+k__Bacteria;p__Firmicutes;c__Bacilli;o__Lactobacillales;f__Lactobacillaceae;g__Lactobacillus	0.108619032361	0.050697516162	0.0254372019078	0.0147679324895	0.100636556532	0.0546367395157
+k__Bacteria;p__Firmicutes;c__Bacilli;o__Turicibacterales;f__Turicibacteraceae;g__Turicibacter	0.0778596603653	0.0874447090847	0.0	0.0	0.0	0.0
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__;g__	0.103172060237	0.0918679823069	0.229888712242	0.131404460518	0.0860866929373	0.0667454223272
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Dehalobacteriaceae;g__Dehalobacterium	0.00096123037488	0.0	0.000317965023847	0.000904159132007	0.0	0.0
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Lachnospiraceae;g__	0.00544697212432	0.00340251786322	0.0359300476948	0.0732368896926	0.0133373749621	0.00797401063201
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Lachnospiraceae;g__Coprococcus	0.00032041012496	0.00102075535897	0.00158982511924	0.0108499095841	0.000909366474689	0.000590667454223
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Lachnospiraceae;g__Dorea	0.00096123037488	0.000340251786322	0.000317965023847	0.00120554550934	0.00121248863292	0.000295333727112
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Lachnospiraceae;g__[Ruminococcus]	0.00544697212432	0.00918679823069	0.00731319554849	0.00452079566004	0.0336465595635	0.0262847017129
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Peptococcaceae;g__rc4-4	0.024351169497	0.0418509697176	0.000317965023847	0.0	0.0	0.0
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Peptostreptococcaceae;g__	0.0294777314963	0.0343654304185	0.0	0.0	0.0309184601394	0.0236266981689
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Ruminococcaceae;g__	0.0048061518744	0.00714528751276	0.01240063593	0.0084388185654	0.00030312215823	0.00206733608978
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Ruminococcaceae;g__Oscillospira	0.00993271387376	0.0170125893161	0.0308426073132	0.0210970464135	0.0909366474689	0.00620200826934
+k__Bacteria;p__Firmicutes;c__Clostridia;o__Clostridiales;f__Ruminococcaceae;g__Ruminococcus	0.00128164049984	0.00204151071793	0.00413354531002	0.0	0.0	0.0
+k__Bacteria;p__Firmicutes;c__Erysipelotrichi;o__Erysipelotrichales;f__Erysipelotrichaceae;g__	0.00032041012496	0.000680503572644	0.00190779014308	0.0	0.00454683237345	0.0191966922623
+k__Bacteria;p__Firmicutes;c__Erysipelotrichi;o__Erysipelotrichales;f__Erysipelotrichaceae;g__Allobaculum	0.00032041012496	0.00102075535897	0.00476947535771	0.0114526823388	0.0612306759624	0.213526284702
+k__Bacteria;p__Proteobacteria;c__Betaproteobacteria;o__Burkholderiales;f__Alcaligenaceae;g__Sutterella	0.0	0.0	0.00794912559618	0.0159734779988	0.0	0.0
+k__Bacteria;p__Tenericutes;c__Mollicutes;o__Anaeroplasmatales;f__Anaeroplasmataceae;g__Anaeroplasma	0.0	0.0	0.0	0.0	0.0115186420127	0.01329001772
+k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Verrucomicrobiaceae;g__Akkermansia	0.0016020506248	0.000340251786322	0.137042925278	0.0415913200723	0.0	0.0

@@ -1,0 +1,9 @@
+# Constructed from biom file
+#OTU ID	CORE_BEADS	ERNESTO_BEADS
+k__Bacteria;p__Bacteroidetes;c__Bacteroidia	0.643655823462	0.454994227054
+k__Bacteria;p__Firmicutes;c__Bacilli	0.0519415549275	0.16370061196
+k__Bacteria;p__Firmicutes;c__Clostridia	0.195613011845	0.254364095353
+k__Bacteria;p__Firmicutes;c__Erysipelotrichi	0.0325761128816	0.0578239489185
+k__Bacteria;p__Proteobacteria;c__Betaproteobacteria	0.0173106447798	0.0090689762177
+k__Bacteria;p__TM7;c__TM7-3	0.0106107069128	0.0096314540275
+k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae	0.0258857956026	0.022561175053

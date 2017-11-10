@@ -1,0 +1,258 @@
+Logging started at 14:16:57 on 07 Apr 2016
+QIIME version: 1.9.1
+
+qiime_config values:
+blastmat_dir	/usr/share/ncbi/data
+pick_otus_reference_seqs_fp	/usr/lib/python2.7/dist-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta
+jobs_to_start	1
+qiime_scripts_dir	/usr/lib/qiime/bin/
+working_dir	.
+pynast_template_alignment_fp	/usr/share/qiime/data/core_set_aligned.fasta.imputed
+python_exe_fp	python
+temp_dir	/tmp/
+assign_taxonomy_reference_seqs_fp	/usr/share/qiime/data/gg_13_8_otus/rep_set/97_otus.fasta
+blastall_fp	blastall
+seconds_to_sleep	60
+assign_taxonomy_id_to_taxonomy_fp	/usr/share/qiime/data/gg_13_8_otus/taxonomy/97_otu_taxonomy.txt
+
+parameter file values:
+parallel:jobs_to_start	1
+
+Input file md5 sums:
+otu_tax.biom: 535a348692f07f8cf7509ccab6f47382
+/usr/local/bioinf/faesdata/metagenomics/map: d2a38f9b6804d286b8101afc03de75bd
+rep_set.tre: 0b8d6da544738c0a4d19fe36fc47942f
+
+Executing commands.
+
+# Generate BIOM table summary command 
+biom summarize-table -i otu_tax.biom -o results//biom_table_summary.txt 
+
+Stdout:
+
+Stderr:
+
+# Filter low sequence count samples from table (minimum sequence count: 2000) command 
+filter_samples_from_otu_table.py -i otu_tax.biom -o results//table_mc2000.biom -n 2000
+
+Stdout:
+
+Stderr:
+
+# Rarify the OTU table to 2000 sequences/sample command 
+single_rarefaction.py -i results//table_mc2000.biom -o results//table_even2000.biom -d 2000
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Beta Diversity (weighted_unifrac) command 
+beta_diversity.py -i results//table_even2000.biom -o results//bdiv_even2000/ --metrics weighted_unifrac  -t rep_set.tre 
+
+Stdout:
+
+Stderr:
+
+# Rename distance matrix (weighted_unifrac) command 
+mv results//bdiv_even2000//weighted_unifrac_table_even2000.txt results//bdiv_even2000//weighted_unifrac_dm.txt
+
+Stdout:
+
+Stderr:
+
+# Principal coordinates (weighted_unifrac) command 
+principal_coordinates.py -i results//bdiv_even2000//weighted_unifrac_dm.txt -o results//bdiv_even2000//weighted_unifrac_pc.txt 
+
+Stdout:
+
+Stderr:
+
+# Make emperor plots, weighted_unifrac) command 
+make_emperor.py -i results//bdiv_even2000//weighted_unifrac_pc.txt -o results//bdiv_even2000//weighted_unifrac_emperor_pcoa_plot/ -m /usr/local/bioinf/faesdata/metagenomics/map 
+
+Stdout:
+
+Stderr:
+
+# Beta Diversity (unweighted_unifrac) command 
+beta_diversity.py -i results//table_even2000.biom -o results//bdiv_even2000/ --metrics unweighted_unifrac  -t rep_set.tre 
+
+Stdout:
+
+Stderr:
+
+# Rename distance matrix (unweighted_unifrac) command 
+mv results//bdiv_even2000//unweighted_unifrac_table_even2000.txt results//bdiv_even2000//unweighted_unifrac_dm.txt
+
+Stdout:
+
+Stderr:
+
+# Principal coordinates (unweighted_unifrac) command 
+principal_coordinates.py -i results//bdiv_even2000//unweighted_unifrac_dm.txt -o results//bdiv_even2000//unweighted_unifrac_pc.txt 
+
+Stdout:
+
+Stderr:
+/usr/lib/python2.7/dist-packages/skbio/stats/ordination/_principal_coordinate_analysis.py:107: RuntimeWarning: The result contains negative eigenvalues. Please compare their magnitude with the magnitude of some of the largest positive eigenvalues. If the negative ones are smaller, it's probably safe to ignore them, but if they are large in magnitude, the results won't be useful. See the Notes section for more details. The smallest eigenvalue is -0.000626576007233 and the largest is 0.169080657265.
+  RuntimeWarning
+
+# Make emperor plots, unweighted_unifrac) command 
+make_emperor.py -i results//bdiv_even2000//unweighted_unifrac_pc.txt -o results//bdiv_even2000//unweighted_unifrac_emperor_pcoa_plot/ -m /usr/local/bioinf/faesdata/metagenomics/map 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Alpha rarefaction command 
+multiple_rarefactions.py -i results//table_mc2000.biom -m 10 -x 2000 -s 199 -o results//arare_max2000//rarefaction/ 
+
+Stdout:
+
+Stderr:
+
+# Alpha diversity on rarefied OTU tables command 
+alpha_diversity.py -i results//arare_max2000//rarefaction/ -o results//arare_max2000//alpha_div/  -t rep_set.tre
+
+Stdout:
+
+Stderr:
+
+# Collate alpha command 
+collate_alpha.py -i results//arare_max2000//alpha_div/ -o results//arare_max2000//alpha_div_collated/ 
+
+Stdout:
+
+Stderr:
+
+# Removing intermediate files command 
+rm -r results//arare_max2000//rarefaction/ results//arare_max2000//alpha_div/
+
+Stdout:
+
+Stderr:
+
+# Rarefaction plot: All metrics command 
+make_rarefaction_plots.py -i results//arare_max2000//alpha_div_collated/ -m /usr/local/bioinf/faesdata/metagenomics/map -o results//arare_max2000//alpha_rarefaction_plots/ 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Sort OTU Table command 
+sort_otu_table.py -i results//table_mc2000.biom -o results//taxa_plots/table_mc2000_sorted.biom
+
+Stdout:
+
+Stderr:
+
+# Summarize Taxonomy command 
+summarize_taxa.py -i results//taxa_plots/table_mc2000_sorted.biom -o results//taxa_plots/ 
+
+Stdout:
+
+Stderr:
+
+# Plot Taxonomy Summary command 
+plot_taxa_summary.py -i results//taxa_plots/table_mc2000_sorted_L2.txt,results//taxa_plots/table_mc2000_sorted_L3.txt,results//taxa_plots/table_mc2000_sorted_L4.txt,results//taxa_plots/table_mc2000_sorted_L5.txt,results//taxa_plots/table_mc2000_sorted_L6.txt -o results//taxa_plots//taxa_summary_plots/ 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Collapse samples in OTU table by categories command 
+collapse_samples.py -m /usr/local/bioinf/faesdata/metagenomics/map -b results//table_mc2000.biom --output_biom_fp results//taxa_plots_Treatment/Treatment_otu_table.biom --output_mapping_fp results//taxa_plots_Treatment/Treatment_map.txt --collapse_fields 'Treatment' 
+
+Stdout:
+
+Stderr:
+
+# Sort OTU Table command 
+sort_otu_table.py -i results//taxa_plots_Treatment/Treatment_otu_table.biom -o results//taxa_plots_Treatment/Treatment_otu_table_sorted.biom
+
+Stdout:
+
+Stderr:
+
+# Summarize Taxonomy command 
+summarize_taxa.py -i results//taxa_plots_Treatment/Treatment_otu_table_sorted.biom -o results//taxa_plots_Treatment/ 
+
+Stdout:
+
+Stderr:
+
+# Plot Taxonomy Summary command 
+plot_taxa_summary.py -i results//taxa_plots_Treatment/Treatment_otu_table_sorted_L2.txt,results//taxa_plots_Treatment/Treatment_otu_table_sorted_L3.txt,results//taxa_plots_Treatment/Treatment_otu_table_sorted_L4.txt,results//taxa_plots_Treatment/Treatment_otu_table_sorted_L5.txt,results//taxa_plots_Treatment/Treatment_otu_table_sorted_L6.txt -o results//taxa_plots_Treatment//taxa_summary_plots/ 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Boxplots (Treatment) command 
+make_distance_boxplots.py -d results//bdiv_even2000//weighted_unifrac_dm.txt -f Treatment -o results//bdiv_even2000//weighted_unifrac_boxplots/ -m /usr/local/bioinf/faesdata/metagenomics/map -n 999 
+
+Stdout:
+
+Stderr:
+
+# Boxplots (Treatment) command 
+make_distance_boxplots.py -d results//bdiv_even2000//unweighted_unifrac_dm.txt -f Treatment -o results//bdiv_even2000//unweighted_unifrac_boxplots/ -m /usr/local/bioinf/faesdata/metagenomics/map -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (PD_whole_tree) command 
+compare_alpha_diversity.py -i results//arare_max2000//alpha_div_collated/PD_whole_tree.txt -m /usr/local/bioinf/faesdata/metagenomics/map -c Treatment -o results//arare_max2000//compare_PD_whole_tree -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (observed_otus) command 
+compare_alpha_diversity.py -i results//arare_max2000//alpha_div_collated/observed_otus.txt -m /usr/local/bioinf/faesdata/metagenomics/map -c Treatment -o results//arare_max2000//compare_observed_otus -n 999 
+
+Stdout:
+
+Stderr:
+
+# Compare alpha diversity (chao1) command 
+compare_alpha_diversity.py -i results//arare_max2000//alpha_div_collated/chao1.txt -m /usr/local/bioinf/faesdata/metagenomics/map -c Treatment -o results//arare_max2000//compare_chao1 -n 999 
+
+Stdout:
+
+Stderr:
+
+# Group significance (Treatment) command 
+group_significance.py -i results//table_even2000.biom -m /usr/local/bioinf/faesdata/metagenomics/map -c Treatment -o results//group_significance_Treatment.txt 
+
+Stdout:
+
+Stderr:
+
+# Compress the filtered BIOM table command 
+gzip results//table_mc2000.biom
+
+Stdout:
+
+Stderr:
+
+# Compress the rarefied BIOM table command 
+gzip results//table_even2000.biom
+
+Stdout:
+
+Stderr:
+
+
+Logging stopped at 14:17:34 on 07 Apr 2016
