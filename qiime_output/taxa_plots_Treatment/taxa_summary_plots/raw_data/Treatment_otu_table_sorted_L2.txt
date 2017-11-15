@@ -1,0 +1,8 @@
+# Constructed from biom file
+#OTU ID	drug	placebo
+k__Bacteria;p__Actinobacteria	0.00114810562572	0.00736896730669
+k__Bacteria;p__Bacteroidetes	0.597119298612	0.584016606124
+k__Bacteria;p__Firmicutes	0.333994363845	0.399896211728
+k__Bacteria;p__Proteobacteria	0.00782799290262	0.0
+k__Bacteria;p__Tenericutes	0.0	0.0086144265698
+k__Bacteria;p__Verrucomicrobia	0.0599102390147	0.000103788271925

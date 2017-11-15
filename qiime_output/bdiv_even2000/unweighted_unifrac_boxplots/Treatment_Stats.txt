@@ -1,0 +1,18 @@
+# The tests of significance were performed using a two-sided Student's two-sample t-test.
+# Alternative hypothesis: Group 1 mean != Group 2 mean
+# The nonparametric p-values were calculated using 999 Monte Carlo permutations.
+# The nonparametric p-values contain the correct number of significant digits.
+# Entries marked with "N/A" could not be calculated because at least one of the groups
+# of distances was empty, both groups each contained only a single distance, or
+# the test could not be performed (e.g. no variance in groups with the same mean).
+Group 1	Group 2	t statistic	Parametric p-value	Parametric p-value (Bonferroni-corrected)	Nonparametric p-value	Nonparametric p-value (Bonferroni-corrected)
+All within Treatment	All between Treatment	-1.86540729581	0.0848490984667	0.848490984667	0.090	0.900
+All within Treatment	placebo vs. placebo	-0.143122852716	0.890225951517	1	0.860	1.000
+All within Treatment	drug vs. drug	0.193403099682	0.852135472292	1	0.916	1.000
+All within Treatment	placebo vs. drug	-1.86540729581	0.0848490984667	0.848490984667	0.087	0.870
+All between Treatment	placebo vs. placebo	1.11956720525	0.289067875555	1	0.227	1.000
+All between Treatment	drug vs. drug	2.34103963901	0.041266356097	0.41266356097	0.030	0.300
+All between Treatment	placebo vs. drug	0.0	1.0	1	1.000	1.000
+placebo vs. placebo	drug vs. drug	0.262394401539	0.80597692834	1	0.837	1.000
+placebo vs. placebo	placebo vs. drug	-1.11956720525	0.289067875555	1	0.227	1.000
+drug vs. drug	placebo vs. drug	-2.34103963901	0.041266356097	0.41266356097	0.022	0.220

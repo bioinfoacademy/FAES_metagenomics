@@ -1,0 +1,21 @@
+Num samples: 6
+Num observations: 76
+Total count: 19,216
+Table density (fraction of non-zero values): 0.735
+
+Counts/sample summary:
+ Min: 2,939.000
+ Max: 3,391.000
+ Median: 3,224.500
+ Mean: 3,202.667
+ Std. dev.: 151.046
+ Sample Metadata Categories: None provided
+ Observation Metadata Categories: taxonomy
+
+Counts/sample detail:
+S2: 2,939.000
+S1: 3,125.000
+S3: 3,144.000
+S5: 3,305.000
+S4: 3,312.000
+S6: 3,391.000

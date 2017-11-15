@@ -1,0 +1,2 @@
+Group1	Group2	Group1 mean	Group1 std	Group2 mean	Group2 std	t stat	p-value
+placebo	drug	53.0166137566	0.634295567267	61.2463888889	3.50173146397	-3.27046668362	0.09
