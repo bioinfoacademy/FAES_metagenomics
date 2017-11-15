@@ -1,0 +1,21 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(phyloseq)
+library(ggplot2)
+theme_set(theme_bw())
+getwd()
+ps <- import_biom('out/json', treefilename = 'out/rep_set.tre')
+ps
+```
+```{r}
+head(otu_table(ps))
+```
+
+```{r}
+# alpha diversity
+plot_richness(ps, x='Treatment' , measures = c('Observed','Fisher','Shannon'), color = 'Treatment')
+```
+
