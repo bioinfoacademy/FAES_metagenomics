@@ -1698,16 +1698,25 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShwaHlsb3NlcSlcbmxpYnJhcnkoZ2dwbG90MilcbmdldHdkKClcbmBgYCJ9 -->
-<pre class="r"><code>library(phyloseq)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkIGxpYnJhcmllc1xubGlicmFyeShwaHlsb3NlcSlcbmxpYnJhcnkoZ2dwbG90MilcbiMgc2V0IHBsb3R0aW5nIHRoZW1lXG50aGVtZV9zZXQodGhlbWVfYncoKSlcbiMgbWFrZSBzdXJlIHlvdSBhcmUgaW4gJ21ldGFnJyBmb2xkZXJcbmdldHdkKClcbmBgYCJ9 -->
+<pre class="r"><code># load libraries
+library(phyloseq)
 library(ggplot2)
+# set plotting theme
+theme_set(theme_bw())
+# make sure you are in 'metag' folder
 getwd()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiL1VzZXJzL2h1c2VuemhhbmcvRG9jdW1lbnRzL0dpdEh1Yi9GQUVTX21ldGFnZW5vbWljc1wiXG4ifQ== -->
 <pre><code>[1] &quot;/Users/husenzhang/Documents/GitHub/FAES_metagenomics&quot;</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHMgPC0gaW1wb3J0X2Jpb20oJ291dC9qc29uJywgdHJlZWZpbGVuYW1lID0gJ291dC9yZXBfc2V0LnRyZScpXG5wc1xuYGBgIn0= -->
-<pre class="r"><code>ps &lt;- import_biom('out/json', treefilename = 'out/rep_set.tre')
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpZiBub3QgaW4gJ21ldGFnJyBmb2xkZXJcbiMgc2V0d2QoXCJ+L0Rlc2t0b3AvbWV0YWdcIilcbiMgZ2V0dGluZyBvdHVfdGFibGUgYW5kIHRyZWUgZmlsZXMgaW50byBhIFxuIyBwaHlsb3NlcSBvYmplY3QgbmFtZWQgcHNcbnBzIDwtIGltcG9ydF9iaW9tKCdvdXQvanNvbicsIHRyZWVmaWxlbmFtZSA9ICdvdXQvcmVwX3NldC50cmUnKVxuIyB0YWtlIGEgbG9vayBhdCAncHMnXG5wc1xuYGBgIn0= -->
+<pre class="r"><code># if not in 'metag' folder
+# setwd(&quot;~/Desktop/metag&quot;)
+# getting otu_table and tree files into a 
+# phyloseq object named ps
+ps &lt;- import_biom('out/json', treefilename = 'out/rep_set.tre')
+# take a look at 'ps'
 ps</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoicGh5bG9zZXEtY2xhc3MgZXhwZXJpbWVudC1sZXZlbCBvYmplY3Rcbm90dV90YWJsZSgpICAgT1RVIFRhYmxlOiAgICAgICAgIFsgNzYgdGF4YSBhbmQgNiBzYW1wbGVzIF1cbnNhbXBsZV9kYXRhKCkgU2FtcGxlIERhdGE6ICAgICAgIFsgNiBzYW1wbGVzIGJ5IDIgc2FtcGxlIHZhcmlhYmxlcyBdXG50YXhfdGFibGUoKSAgIFRheG9ub215IFRhYmxlOiAgICBbIDc2IHRheGEgYnkgNyB0YXhvbm9taWMgcmFua3MgXVxucGh5X3RyZWUoKSAgICBQaHlsb2dlbmV0aWMgVHJlZTogWyA3NiB0aXBzIGFuZCA3NCBpbnRlcm5hbCBub2RlcyBdXG4ifQ== -->
@@ -1749,7 +1758,7 @@ plot_richness(ps, x='Treatment' , measures = c('Observed','Fisher','Shannon'), c
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQpgYGB7cn0KbGlicmFyeShwaHlsb3NlcSkKbGlicmFyeShnZ3Bsb3QyKQp0aGVtZV9zZXQodGhlbWVfYncoKSkKZ2V0d2QoKQpwcyA8LSBpbXBvcnRfYmlvbSgnb3V0L2pzb24nLCB0cmVlZmlsZW5hbWUgPSAnb3V0L3JlcF9zZXQudHJlJykKcHMKYGBgCmBgYHtyfQpoZWFkKG90dV90YWJsZShwcykpCmBgYAoKYGBge3J9CiMgYWxwaGEgZGl2ZXJzaXR5CnBsb3RfcmljaG5lc3MocHMsIHg9J1RyZWF0bWVudCcgLCBtZWFzdXJlcyA9IGMoJ09ic2VydmVkJywnRmlzaGVyJywnU2hhbm5vbicpLCBjb2xvciA9ICdUcmVhdG1lbnQnKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQpgYGB7cn0KIyBsb2FkIGxpYnJhcmllcwpsaWJyYXJ5KHBoeWxvc2VxKQpsaWJyYXJ5KGdncGxvdDIpCiMgc2V0IHBsb3R0aW5nIHRoZW1lCnRoZW1lX3NldCh0aGVtZV9idygpKQojIG1ha2Ugc3VyZSB5b3UgYXJlIGluICdtZXRhZycgZm9sZGVyCmdldHdkKCkKIyBpZiBub3QgaW4gJ21ldGFnJyBmb2xkZXIKIyBzZXR3ZCgifi9EZXNrdG9wL21ldGFnIikKIyBnZXR0aW5nIG90dV90YWJsZSBhbmQgdHJlZSBmaWxlcyBpbnRvIGEgCiMgcGh5bG9zZXEgb2JqZWN0IG5hbWVkIHBzCnBzIDwtIGltcG9ydF9iaW9tKCdvdXQvanNvbicsIHRyZWVmaWxlbmFtZSA9ICdvdXQvcmVwX3NldC50cmUnKQojIHRha2UgYSBsb29rIGF0ICdwcycKcHMKYGBgCmBgYHtyfQpoZWFkKG90dV90YWJsZShwcykpCmBgYAoKYGBge3J9CiMgYWxwaGEgZGl2ZXJzaXR5CnBsb3RfcmljaG5lc3MocHMsIHg9J1RyZWF0bWVudCcgLCBtZWFzdXJlcyA9IGMoJ09ic2VydmVkJywnRmlzaGVyJywnU2hhbm5vbicpLCBjb2xvciA9ICdUcmVhdG1lbnQnKQpgYGAKCg==</div>
 
 
 

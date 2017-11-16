@@ -1,2 +1,0 @@
-Group1	Group2	Group1 mean	Group1 std	Group2 mean	Group2 std	t stat	p-value
-ERNESTO_BEADS	CORE_BEADS	335.81875	18.2550752789	316.83125	23.4009005903	2.47777836378	0.017

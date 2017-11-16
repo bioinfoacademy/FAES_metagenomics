@@ -3,11 +3,19 @@ title: "R Notebook"
 output: html_notebook
 ---
 ```{r}
+# load libraries
 library(phyloseq)
 library(ggplot2)
+# set plotting theme
 theme_set(theme_bw())
+# make sure you are in 'metag' folder
 getwd()
+# if not in 'metag' folder
+# setwd("~/Desktop/metag")
+# getting otu_table and tree files into a 
+# phyloseq object named ps
 ps <- import_biom('out/json', treefilename = 'out/rep_set.tre')
+# take a look at 'ps'
 ps
 ```
 ```{r}
