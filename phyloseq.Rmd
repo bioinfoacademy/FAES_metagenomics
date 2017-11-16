@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 ```{r}
 # load libraries
@@ -19,11 +21,118 @@ ps <- import_biom('out/json', treefilename = 'out/rep_set.tre')
 ps
 ```
 ```{r}
-head(otu_table(ps))
+# aha 76 otus in 6 samples - we knew this since Tuesday
+# just to double-check the dimention of our otu_table
+dim(otu_table(ps))
 ```
 
 ```{r}
-# alpha diversity
+# take a look at data
+head(otu_table(ps))
+```
+```{r}
+# 6 samples: S1 to S6
+# 2 sample variables: Description and Treatment
+sample_data(ps)
+```
+```{r}
+# plot alpha diversity
 plot_richness(ps, x='Treatment' , measures = c('Observed','Fisher','Shannon'), color = 'Treatment')
+```
+
+```{r}
+# other valid measures are "Chao1", "ACE", "InvSimpson".
+# these are ecological richness measures - google their meanings. 
+```
+
+```{r}
+# now take a look at our rep_set.tre
+phy_tree(ps)
+```
+
+```{r}
+# which OTUs are most abundant?
+taxa_sums(ps)
+```
+
+```{r}
+# not obvious! let's sort them
+sort(taxa_sums(ps), decreasing = TRUE)[1:10]
+```
+
+```{r}
+# let's plot a subset tree containing 10 most abundant OTUs
+# step1 : myTaxa is a list of OTU names
+myTaxa <- names(sort(taxa_sums(ps), decreasing = TRUE)[1:10])
+# step 2: cut these 10 OTUs out from the whole dataset
+ex1 = prune_taxa(myTaxa, ps)
+# step 3: plot just these 10 OTUs
+plot(phy_tree(ex1), show.node.label = TRUE)
+
+```
+```{r}
+# now we plot the same tree with drug/placebo information
+# Rank3 means at the bacterial Class level (Rank 2 would be phylum) 
+plot_tree(ex1, color = "Treatment", label.tips = "Rank3", ladderize = "left", justify = "left" , size = "Abundance")
+```
+
+```{r}
+# what do we conclude? Verrucomicrobia appears to be more in drug group
+```
+
+```{r}
+# convert counts to relative abundance
+psr  = transform_sample_counts(ps, function(x) x / sum(x) )
+# filter out low abundance OTUs
+fr = filter_taxa(psr, function(x) mean(x) > 1e-5, TRUE)
+# plot bar
+plot_bar(tax_glom(psr, "Rank2"), fill = "Rank2", facet_grid = ~Treatment)
+```
+
+```{r}
+# above graph okay but have ugly gaps! 
+# fix them now by using ggplot2
+df = plot_bar(tax_glom(psr, "Rank2"), fill = "Rank2", facet_grid = ~Treatment)$data
+
+ggplot(df, aes(Sample, Abundance, fill = Rank2)) + 
+  geom_bar(stat = 'identity') +
+  facet_wrap(~Treatment, scales = "free_x")
+```
+```{r}
+# this is publication-ready graphics!
+```
+```{r}
+# pca plots
+pso <- ordinate(ps, "PCoA", "unifrac")
+plot_ordination(ps, pso, type="samples", color = "Treatment")
+```
+```{r}
+# plot a heatmap
+# may need install.packages('pheatmap')
+if (!require(pheatmap)){
+  install.packages("pheatmap")
+  library(pheatmap)
+}
+
+EPS = 1E-10 # a tiny number
+mat <- data.frame(log(otu_table(ps) + EPS, 2),
+                  check.names = FALSE)
+
+pheatmap(mat,
+         show_rownames=FALSE,
+         show_colnames=TRUE,
+         #treeheight_row=0,
+         annotation_col=data.frame(sample_data(ps)[, "Treatment"])
+         )
+
+```
+```{r}
+# we see three clusters in the heatmap 
+# it would be nice if we see two (drug, placebo)
+```
+
+```{r}
+# plot network
+plot_net(ps, color = "Treatment")
 ```
 
