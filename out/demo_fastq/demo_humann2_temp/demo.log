@@ -1,0 +1,4 @@
+11/16/2017 08:28:00 AM - humann2.humann2 - INFO: Running humann2 v0.11.1
+11/16/2017 08:28:00 AM - humann2.humann2 - INFO: Output files will be written to: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out/demo_fastq
+11/16/2017 08:28:00 AM - humann2.humann2 - INFO: Writing temp files to directory: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out/demo_fastq/demo_humann2_temp
+11/16/2017 08:28:00 AM - humann2.utilities - INFO: File ( /Users/husenzhang/Documents/GitHub/FAES_metagenomics/data/demo.fastq ) is of format:  fastq

@@ -1,0 +1,25 @@
+OtuPicker parameters:
+Application:uclust
+Similarity:0.97
+chimeras_retention:union
+enable_rev_strand_matching:False
+exact:False
+max_accepts:1
+max_rejects:8
+new_cluster_identifier:denovo
+next_new_cluster_number:1
+optimal:False
+output_dir:picrust_biom/uclust_ref_picked_otus
+prefilter_identical_sequences:True
+presort_by_abundance:True
+save_uc_files:True
+stable_sort:True
+stepwords:8
+suppress_new_clusters:True
+suppress_sort:True
+word_length:8
+Reference seqs:/Users/husenzhang/anaconda3/envs/qiime/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta
+Num OTUs:372
+Num new OTUs:0
+Num failures:819
+Result path: picrust_biom/uclust_ref_picked_otus/seqs_picrust_otus.txt

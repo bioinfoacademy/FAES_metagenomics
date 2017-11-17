@@ -1,0 +1,117 @@
+11/16/2017 06:44:13 PM - humann2.humann2 - INFO: Running humann2 v0.11.1
+11/16/2017 06:44:13 PM - humann2.humann2 - INFO: Output files will be written to: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2
+11/16/2017 06:44:13 PM - humann2.humann2 - INFO: Writing temp files to directory: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp
+11/16/2017 06:44:13 PM - humann2.utilities - INFO: File ( /Users/husenzhang/Documents/GitHub/FAES_metagenomics/data/demo.fastq ) is of format:  fastq
+11/16/2017 06:44:13 PM - humann2.humann2 - INFO: Search mode set to uniref90 because a uniref90 translated search database is selected
+11/16/2017 06:44:13 PM - humann2.utilities - DEBUG: Check software, diamond, for required version, 0.8.22
+11/16/2017 06:44:13 PM - humann2.utilities - INFO: Using diamond version 0.8.22
+11/16/2017 06:44:13 PM - humann2.config - INFO: 
+Run config settings: 
+
+DATABASE SETTINGS
+nucleotide database folder = /Users/husenzhang/Documents/GitHub/FAES_metagenomics/humann2_database_downloads/chocophlan
+protein database folder = /Users/husenzhang/Documents/GitHub/FAES_metagenomics/humann2_database_downloads/uniref
+pathways database file 1 = /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/data/pathways/metacyc_reactions_level4ec_only.uniref.bz2
+pathways database file 2 = /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/data/pathways/metacyc_pathways_structured_filtered
+utility mapping database folder = /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/data/misc
+
+RUN MODES
+resume = False
+verbose = False
+bypass prescreen = True
+bypass nucleotide index = True
+bypass nucleotide search = True
+bypass translated search = False
+translated search = diamond
+pick frames = off
+threads = 1
+
+SEARCH MODE
+search mode = uniref90
+identity threshold = 90.0
+
+ALIGNMENT SETTINGS
+evalue threshold = 1.0
+prescreen threshold = 0.01
+translated subject coverage threshold = 50.0
+translated query coverage threshold = 90.0
+
+PATHWAYS SETTINGS
+minpath = on
+xipe = off
+gap fill = on
+
+INPUT AND OUTPUT FORMATS
+input file format = fastq
+output file format = tsv
+output max decimals = 10
+remove stratified output = False
+remove column description output = False
+log level = DEBUG
+
+11/16/2017 06:44:13 PM - humann2.store - DEBUG: Initialize Alignments class instance to minimize memory use
+11/16/2017 06:44:13 PM - humann2.store - DEBUG: Initialize Reads class instance to minimize memory use
+11/16/2017 06:44:18 PM - humann2.humann2 - INFO: Load pathways database part 1: /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/data/pathways/metacyc_reactions_level4ec_only.uniref.bz2
+11/16/2017 06:44:18 PM - humann2.humann2 - INFO: Load pathways database part 2: /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/data/pathways/metacyc_pathways_structured_filtered
+11/16/2017 06:44:18 PM - humann2.humann2 - DEBUG: Custom database is empty
+11/16/2017 06:44:18 PM - humann2.store - DEBUG: Initialize Reads class instance to minimize memory use
+11/16/2017 06:44:19 PM - humann2.utilities - DEBUG: Remove file: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmp90vk21rj
+11/16/2017 06:44:19 PM - humann2.search.translated - DEBUG: Convert unaligned reads fastq file to fasta
+11/16/2017 06:44:19 PM - humann2.search.translated - INFO: Running diamond ........
+11/16/2017 06:44:19 PM - humann2.search.translated - INFO: Aligning to reference database: uniref90_demo_prots.dmnd
+11/16/2017 06:44:19 PM - humann2.utilities - DEBUG: Remove file: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/diamond_m8_u3s4eoku
+11/16/2017 06:44:19 PM - humann2.utilities - DEBUG: Using software: /Users/husenzhang/anaconda3/bin/diamond
+11/16/2017 06:44:19 PM - humann2.utilities - INFO: Execute command: /Users/husenzhang/anaconda3/bin/diamond blastx --query /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpv_sz5ug7 --evalue 1.0 --threads 1 --max-target-seqs 20 --outfmt 6 --db /Users/husenzhang/Documents/GitHub/FAES_metagenomics/humann2_database_downloads/uniref/uniref90_demo_prots --out /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/diamond_m8_u3s4eoku --tmpdir /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: b'diamond v0.8.22.84 | by Benjamin Buchfink <buchfink@gmail.com>\nCheck http://github.com/bbuchfink/diamond for updates.\n\n#CPU threads: 1\nScoring parameters: (Matrix=BLOSUM62 Lambda=0.267 K=0.041 Penalties=11/1)\n#Target sequences to report alignments for: 20\nTemporary directory: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci\nOpening the database...  [3.9e-05s]\nOpening the input file...  [0.003021s]\nOpening the output file...  [0.000114s]\nLoading query sequences...  [0.095413s]\nRunning complexity filter...  [0.570942s]\nBuilding query histograms...  [0.014546s]\nAllocating buffers...  [2.3e-05s]\nLoading reference sequences...  [0.017458s]\nBuilding reference histograms...  [0.12845s]\nAllocating buffers...  [1.8e-05s]\nInitializing temporary storage...  [0.00065s]\nProcessing query chunk 0, reference chunk 0, shape 0, index chunk 0.\nBuilding reference index...  [0.323713s]\nBuilding query index...  [0.03914s]\nBuilding seed filter...  [0.024134s]\nSearching alignments...  [0.122s]\nProcessing query chunk 0, reference chunk 0, shape 0, index chunk 1.\nBuilding reference index...  [0.357859s]\nBuilding query index...  [0.044057s]\nBuilding seed filter...  [0.02424s]\nSearching alignments...  [0.121798s]\nProcessing query chunk 0, reference chunk 0, shape 0, index chunk 2.\nBuilding reference index...  [0.367148s]\nBuilding query index...  [0.043495s]\nBuilding seed filter...  [0.024198s]\nSearching alignments...  [0.119721s]\nProcessing query chunk 0, reference chunk 0, shape 0, index chunk 3.\nBuilding reference index...  [0.309401s]\nBuilding query index...  [0.03716s]\nBuilding seed filter...  [0.024402s]\nSearching alignments...  [0.120657s]\nProcessing query chunk 0, reference chunk 0, shape 1, index chunk 0.\nBuilding reference index...  [0.306602s]\nBuilding query index...  [0.032012s]\nBuilding seed filter...  [0.0237s]\nSearching alignments...  [0.118572s]\nProcessing query chunk 0, reference chunk 0, shape 1, index chunk 1.\nBuilding reference index...  [0.359285s]\nBuilding query index...  [0.041887s]\nBuilding seed filter...  [0.025936s]\nSearching alignments...  [0.121666s]\nProcessing query chunk 0, reference chunk 0, shape 1, index chunk 2.\nBuilding reference index...  [0.360622s]\nBuilding query index...  [0.037884s]\nBuilding seed filter...  [0.024473s]\nSearching alignments...  [0.120539s]\nProcessing query chunk 0, reference chunk 0, shape 1, index chunk 3.\nBuilding reference index...  [0.312846s]\nBuilding query index...  [0.031895s]\nBuilding seed filter...  [0.023653s]\nSearching alignments...  [0.119134s]\nProcessing query chunk 0, reference chunk 0, shape 2, index chunk 0.\nBuilding reference index...  [0.302501s]\nBuilding query index...  [0.023827s]\nBuilding seed filter...  [0.022973s]\nSearching alignments...  [0.116673s]\nProcessing query chunk 0, reference chunk 0, shape 2, index chunk 1.\nBuilding reference index...  [0.353505s]\nBuilding query index...  [0.027645s]\nBuilding seed filter...  [0.024282s]\nSearching alignments...  [0.119843s]\nProcessing query chunk 0, reference chunk 0, shape 2, index chunk 2.\nBuilding reference index...  [0.364985s]\nBuilding query index...  [0.029732s]\nBuilding seed filter...  [0.025286s]\nSearching alignments...  [0.117037s]\nProcessing query chunk 0, reference chunk 0, shape 2, index chunk 3.\nBuilding reference index...  [0.305461s]\nBuilding query index...  [0.023234s]\nBuilding seed filter...  [0.022989s]\nSearching alignments...  [0.117683s]\nProcessing query chunk 0, reference chunk 0, shape 3, index chunk 0.\nBuilding reference index...  [0.299736s]\nBuilding query index...  [0.020423s]\nBuilding seed filter...  [0.022839s]\nSearching alignments...  [0.116127s]\nProcessing query chunk 0, reference chunk 0, shape 3, index chunk 1.\nBuilding reference index...  [0.3492s]\nBuilding query index...  [0.022644s]\nBuilding seed filter...  [0.023011s]\nSearching alignments...  [0.116488s]\nProcessing query chunk 0, reference chunk 0, shape 3, index chunk 2.\nBuilding reference index...  [0.353242s]\nBuilding query index...  [0.023571s]\nBuilding seed filter...  [0.023514s]\nSearching alignments...  [0.118454s]\nProcessing query chunk 0, reference chunk 0, shape 3, index chunk 3.\nBuilding reference index...  [0.30774s]\nBuilding query index...  [0.020585s]\nBuilding seed filter...  [0.023695s]\nSearching alignments...  [0.118832s]\nDeallocating buffers...  [0.002641s]\nComputing alignments...  [0.144817s]\nDeallocating reference...  [0.001302s]\nLoading reference sequences...  [3.4e-05s]\nDeallocating buffers...  [0.000412s]\nDeallocating queries...  [0.000748s]\nLoading query sequences...  [1.7e-05s]\nClosing the output file...  [0.000144s]\nClosing the database file...  [1.4e-05s]\nTotal time = 9.1043s\nReported 5356 pairwise alignments, 5365 HSSPs.\n1394 queries aligned.\n'
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Using software: /bin/cat
+11/16/2017 06:44:28 PM - humann2.utilities - INFO: Execute command: /bin/cat /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/diamond_m8_u3s4eoku
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Remove file: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpv_sz5ug7
+11/16/2017 06:44:28 PM - humann2.humann2 - INFO: TIMESTAMP: Completed 	translated alignment 	:	 10	 seconds
+11/16/2017 06:44:28 PM - humann2.search.blastx_coverage - INFO: Total alignments without coverage information: 0
+11/16/2017 06:44:28 PM - humann2.search.blastx_coverage - INFO: Total proteins in blastx output: 322
+11/16/2017 06:44:28 PM - humann2.search.blastx_coverage - INFO: Total proteins without lengths: 0
+11/16/2017 06:44:28 PM - humann2.search.blastx_coverage - INFO: Proteins with coverage greater than threshold (50.0): 47
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Total alignments where percent identity is not a number: 0
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Total alignments where alignment length is not a number: 0
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Total alignments where E-value is not a number: 0
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Total translated alignments not included based on large e-value: 0
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Total translated alignments not included based on small percent identity: 3873
+11/16/2017 06:44:28 PM - humann2.utilities - DEBUG: Total translated alignments not included based on small query coverage: 696
+11/16/2017 06:44:28 PM - humann2.search.translated - DEBUG: Total translated alignments not included based on small subject coverage value: 460
+11/16/2017 06:44:29 PM - humann2.utilities - DEBUG: Remove file: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpw9yweojh
+11/16/2017 06:44:29 PM - humann2.humann2 - INFO: TIMESTAMP: Completed 	translated alignment post-processing 	:	 0	 seconds
+11/16/2017 06:44:29 PM - humann2.humann2 - INFO: Total bugs after translated alignment: 1
+11/16/2017 06:44:29 PM - humann2.humann2 - INFO: 
+unclassified: 988 hits
+11/16/2017 06:44:29 PM - humann2.humann2 - INFO: Total gene families after translated alignment: 47
+11/16/2017 06:44:29 PM - humann2.humann2 - INFO: Unaligned reads after translated alignment: 95.4238095238 %
+11/16/2017 06:44:29 PM - humann2.humann2 - INFO: Computing gene families ...
+11/16/2017 06:44:29 PM - humann2.quantify.families - DEBUG: Compute gene families
+11/16/2017 06:44:29 PM - humann2.store - INFO: 
+Total gene families  : 47
+unclassified : 47 gene families
+11/16/2017 06:44:47 PM - humann2.humann2 - INFO: TIMESTAMP: Completed 	computing gene families 	:	 18	 seconds
+11/16/2017 06:44:47 PM - humann2.humann2 - INFO: Computing pathways abundance and coverage ...
+11/16/2017 06:44:47 PM - humann2.quantify.modules - DEBUG: Write flat reactions to pathways file for Minpath
+11/16/2017 06:44:47 PM - humann2.quantify.modules - INFO: Compute reaction scores for bug: all
+11/16/2017 06:44:47 PM - humann2.quantify.modules - INFO: Run MinPath on all
+11/16/2017 06:44:47 PM - humann2.quantify.modules - INFO: Compute reaction scores for bug: unclassified
+11/16/2017 06:44:48 PM - humann2.quantify.modules - INFO: Run MinPath on unclassified
+11/16/2017 06:44:48 PM - humann2.utilities - DEBUG: Using python module : /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/quantify/MinPath12hmp.py
+11/16/2017 06:44:48 PM - humann2.utilities - INFO: Execute command: /Users/husenzhang/anaconda3/bin/python /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/quantify/MinPath12hmp.py -any /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpm7tnmef0 -map /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmp315wt_94 -report /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpn0yhq66d -details /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmp99x0fd9m -mps /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpc27q8dwm
+11/16/2017 06:44:48 PM - humann2.utilities - DEBUG: Using python module : /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/quantify/MinPath12hmp.py
+11/16/2017 06:44:48 PM - humann2.utilities - INFO: Execute command: /Users/husenzhang/anaconda3/bin/python /Users/husenzhang/anaconda3/lib/python3.5/site-packages/humann2/quantify/MinPath12hmp.py -any /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmp82nq31x4 -map /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmp315wt_94 -report /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpokthkbr9 -details /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpic89tkb9 -mps /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci/tmpgbdj41m0
+11/16/2017 06:44:49 PM - humann2.quantify.modules - DEBUG: Compute pathway abundance for bug: all
+11/16/2017 06:44:49 PM - humann2.quantify.modules - DEBUG: Compute pathway abundance for bug: unclassified
+11/16/2017 06:44:49 PM - humann2.quantify.modules - DEBUG: Compute pathway coverage for bug: all
+11/16/2017 06:44:49 PM - humann2.quantify.modules - DEBUG: Compute pathway coverage for bug: unclassified
+11/16/2017 06:44:49 PM - humann2.quantify.modules - DEBUG: Print pathways _Abundance
+11/16/2017 06:44:49 PM - humann2.quantify.modules - DEBUG: Print pathways _Coverage
+11/16/2017 06:44:49 PM - humann2.humann2 - INFO: TIMESTAMP: Completed 	computing pathways 	:	 2	 seconds
+11/16/2017 06:44:49 PM - humann2.humann2 - INFO: 
+Output files created: 
+/Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_genefamilies.tsv
+/Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_pathabundance.tsv
+/Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_pathcoverage.tsv
+
+11/16/2017 06:44:49 PM - humann2.utilities - DEBUG: Remove directory: /Users/husenzhang/Documents/GitHub/FAES_metagenomics/out_humann2/demo_humann2_temp/tmpv34bw6ci
